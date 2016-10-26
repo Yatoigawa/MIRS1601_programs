@@ -10,3 +10,7 @@ masterブランチとdevelopブランチ、hotfixブランチで管理する予�
 ## .mdファイルを編集するときには
 もしこのファイルを編集する際にはPull requestから提案してください  
 わからなければ編集責任者に言ってください
+
+## .mdファイル編集 参考URL
+興味のある人は下記サイトを参照にしてください  
+<http://codechord.com/2012/01/readme-markdown/>
