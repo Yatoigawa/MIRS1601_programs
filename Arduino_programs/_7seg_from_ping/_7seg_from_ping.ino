@@ -1,6 +1,5 @@
 #define SERIAL_SPEED      9600
 #define PING_PIN 7
-#define HIGH_LOW_JUDGE(n) ((n == 1) ? HIGH : LOW)
 
 const int output_pins_one[7] = {53, 50, 49, 46 , 45, 42, 41};
 const int output_pins_ten[7] = {35, 32, 31, 28, 27, 24, 23};
@@ -31,22 +30,6 @@ void setup() {
 
 void loop() {
   uint8_t data;
-  /*
-    テスト用:  Arduino Dueは3V3動作の為PING)))の動作が不安定
-    //long duration;
-
-    // PING)))による距離計測ルーチン
-    pinMode(PING_PIN, OUTPUT);
-    digitalWrite(PING_PIN, LOW);
-    delayMicroseconds(2);
-    digitalWrite(PING_PIN, HIGH);
-    delayMicroseconds(5);
-    digitalWrite(PING_PIN, LOW);
-
-    pinMode(PING_PIN, INPUT);
-    duration = pulseIn(PING_PIN, HIGH);
-    data = microsecondsToCentimeters(duration);
-  */
   if (Serial.available() > 0) {
     data = Serial.read();
     if (data < 100) {
@@ -63,8 +46,4 @@ void loop() {
     }
   }
   delay(100);
-}
-
-long microsecondsToCentimeters(long microseconds) {
-  return microseconds / 29 / 2;
 }
