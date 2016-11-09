@@ -32,10 +32,15 @@ void loop() {
   pinMode(PING_PIN, INPUT);
   duration = pulseIn(PING_PIN, HIGH);
   cm = microsecondsToCentimeters(duration);
-  
+
+  /*
   // cmで表示
   Serial.print(cm);
   Serial.println("cm");
+  */
+
+  // Arduino Dueに送信
+  Serial.write(cm);
   delay(100);
 }
 
