@@ -10,39 +10,35 @@ char command = NULL;
 bool checkTestFinished = true;
 
 //子クラスをインスタンス化
-Program *motor = new Motor;
-Program *uss = new Uss;
-Program *ir = new Ir;
-Program *tape = new Tape;
-Program *encoder = new Encoder;
-Program *mp3 = new Mp3;
+//これで新しいクラスができても変更が楽
+Program *pTests[5] = { new Motor, new Uss, new Ir, new Encoder, new Mp3 };
 
 void selector() {
 	//コマンドの文字によって子クラスのポインタを親クラスへ代入
 	switch (command)
 	{
 	case 'm':
-		motor->Processor();
+		pTests[0]->Processor();
 		break;
 
 	case 'u':
-		uss->Processor();
+		pTests[1]->Processor();
 		break;
 
 	case 'i':
-		ir->Processor();
+		pTests[2]->Processor();
 		break;
 
 	case 't':
-		tape->Processor();
+		pTests[3]->Processor();
 		break;
 
 	case 'e':
-		encoder->Processor();
+		pTests[4]->Processor();
 		break;
 
 	case 'M':
-		mp3->Processor();
+		pTests[5]->Processor();
 		break;
 
 	default:
