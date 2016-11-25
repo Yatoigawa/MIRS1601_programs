@@ -14,6 +14,9 @@ bool ledState = true;
 //プロトタイプ宣言
 void flashLED(int pin, int delayTime);
 
+//これで新しいクラスができても変更が楽
+//Program *pTests[5] = { new Motor, new Uss, new Ir, new Encoder, new Mp3 };
+
 void setup() {
 	pinMode(13, OUTPUT);
 	initPinAssiment(outputPins, OUTPUT);

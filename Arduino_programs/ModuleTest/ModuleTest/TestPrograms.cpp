@@ -10,11 +10,12 @@ char command = NULL;
 bool checkTestFinished = true;
 
 //子クラスをインスタンス化
-Program *motor = new Motor();
-Program *uss = new Uss();
-Program *ir = new Ir();
-Program *encoder = new Encoder();
-Program *mp3 = new Mp3();
+Program *motor = new Motor;
+Program *uss = new Uss;
+Program *ir = new Ir;
+Program *tape = new Tape;
+Program *encoder = new Encoder;
+Program *mp3 = new Mp3;
 
 void selector() {
 	//コマンドの文字によって子クラスのポインタを親クラスへ代入
@@ -33,7 +34,7 @@ void selector() {
 		break;
 
 	case 't':
-		ir->Processor();
+		tape->Processor();
 		break;
 
 	case 'e':
@@ -48,6 +49,7 @@ void selector() {
 		//なにも処理しない
 		break;
 	}
+	command = NULL;
 }
 
 /*
@@ -58,12 +60,24 @@ void Program::Processor() {
 	//共通部分であるwhile、menu()、commandを記述
 	while (true)
 	{
-		//process()は純粋仮想関数で、このクラスには実装されていない
-		process();
-		break;
+		readSerialEnd();
+		if (true)
+		{
+			goto END;
+		}
+		else {
+			//process()は純粋仮想関数で、このクラスには実装されていない
+			process();
+		}
 	}
+	END:
 	menu();
-	command = NULL;
+}
+
+void Program::readSerialEnd() {
+	if (Serial.read() == 'e') {
+		isEnd = false;
+	}
 }
 
 /*

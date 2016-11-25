@@ -1,5 +1,5 @@
 /*
-	ピンの初期化をするファイル
+ピンの初期化をするファイル
 */
 #include "PinAssignment.h"
 #include "Arduino.h"
