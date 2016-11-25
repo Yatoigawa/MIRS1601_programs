@@ -13,10 +13,14 @@ void selector();
 C++のtemplateとは違うので注意
 */
 
+//インスタンス化しないように
 class Program
 {
 public:
+	boolean *isEnd = false;
+
 	void Processor();	//処理メソッド
+	void readSerialEnd();
 
 	//この関数をオーバーライドすることで、子クラス(各テストプログラム)によって処理を変えられる
 	virtual void process() = 0;
@@ -46,6 +50,8 @@ public:
 class Tape : public Program
 {
 public:
+	int counter;
+
 	Tape() {};
 	void process();
 };

@@ -10,44 +10,42 @@ char command = NULL;
 bool checkTestFinished = true;
 
 //子クラスをインスタンス化
-Program *motor = new Motor();
-Program *uss = new Uss();
-Program *ir = new Ir();
-Program *encoder = new Encoder();
-Program *mp3 = new Mp3();
+//これで新しいクラスができても変更が楽
+Program *pTests[5] = { new Motor, new Uss, new Ir, new Encoder, new Mp3 };
 
 void selector() {
 	//コマンドの文字によって子クラスのポインタを親クラスへ代入
 	switch (command)
 	{
 	case 'm':
-		motor->Processor();
+		pTests[0]->Processor();
 		break;
 
 	case 'u':
-		uss->Processor();
+		pTests[1]->Processor();
 		break;
 
 	case 'i':
-		ir->Processor();
+		pTests[2]->Processor();
 		break;
 
 	case 't':
-		ir->Processor();
+		pTests[3]->Processor();
 		break;
 
 	case 'e':
-		encoder->Processor();
+		pTests[4]->Processor();
 		break;
 
 	case 'M':
-		mp3->Processor();
+		pTests[5]->Processor();
 		break;
 
 	default:
 		//なにも処理しない
 		break;
 	}
+	command = NULL;
 }
 
 /*
@@ -58,12 +56,24 @@ void Program::Processor() {
 	//共通部分であるwhile、menu()、commandを記述
 	while (true)
 	{
-		//process()は純粋仮想関数で、このクラスには実装されていない
-		process();
-		break;
+		readSerialEnd();
+		if (true)
+		{
+			goto END;
+		}
+		else {
+			//process()は純粋仮想関数で、このクラスには実装されていない
+			process();
+		}
 	}
+	END:
 	menu();
-	command = NULL;
+}
+
+void Program::readSerialEnd() {
+	if (Serial.read() == 'e') {
+		isEnd = false;
+	}
 }
 
 /*
@@ -83,8 +93,14 @@ void Ir::process() {
 	//ここに実装内容を書く
 }
 
+//TapeLEDは3bitの信号をデコードする
 void Tape::process() {
-	//ここに実装内容を書く
+	for (counter = 8; counter < 0; counter++)
+	{
+		byte b = (byte)counter % 2;
+		digitalWrite(TL_0,b);
+		counter = counter;
+	}
 }
 
 void Encoder::process() {
