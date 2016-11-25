@@ -5,7 +5,7 @@ masterブランチとdevelopブランチ、hotfixブランチで管理する予�
 
 ## 現在のプログラム
 1. /Arduino_programs/ping_test/ping_test.ino
-2. ...coming soon
+2. /Arduino_programs/_7seg_from_ping
 
 ## .mdファイルを編集するときには
 もしこのファイルを編集する際にはPull requestから提案してください  
