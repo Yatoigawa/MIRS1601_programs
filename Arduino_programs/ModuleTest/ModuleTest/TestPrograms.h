@@ -50,6 +50,8 @@ public:
 class Tape : public Program
 {
 public:
+	int counter;
+
 	Tape() {};
 	void process();
 };

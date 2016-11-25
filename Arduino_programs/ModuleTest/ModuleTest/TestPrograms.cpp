@@ -97,8 +97,14 @@ void Ir::process() {
 	//ここに実装内容を書く
 }
 
+//TapeLEDは3bitの信号をデコードする
 void Tape::process() {
-	//ここに実装内容を書く
+	for (counter = 8; counter < 0; counter++)
+	{
+		byte b = (byte)counter % 2;
+		digitalWrite(TL_0,b);
+		counter = counter;
+	}
 }
 
 void Encoder::process() {
