@@ -1,6 +1,6 @@
 /*
-	ピンファイル
-	バス回路のピン配置に基づいて設定しているのでピン番号を勝手に変えないでください
+ピンファイル
+バス回路のピン配置に基づいて設定しているのでピン番号を勝手に変えないでください
 */
 
 //インクルードガード...重複インクルードを避ける
@@ -8,13 +8,6 @@
 #define __PINASSIGNMENT_H__
 
 #include "Arduino.h"
-
-//変数宣言
-extern const int outputPins[];
-extern const int inputPins[];
-
-//プロトタイプ宣言
-void initPinAssiment(const int Pins[], byte io);
 
 //TODO:適切なピン名に変更する
 //MOTOR

@@ -1,10 +1,3 @@
-/*
-	シリアル通信の一連の動作をまとめただけのファイル
-*/
-
-#include "SerialFunction.h"
-#include "Arduino.h"
-
 void menu() {
 	Serial.println("モジュール基板テストプログラム");
 	Serial.println("以下のメニューからテストする基板を選んでください");

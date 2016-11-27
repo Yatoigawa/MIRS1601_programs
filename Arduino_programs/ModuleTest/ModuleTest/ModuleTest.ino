@@ -2,13 +2,16 @@
 	メインプログラム
 	テストボードごとに書き換えるのは面倒なのでシリアル通信でテスト内容を変更する
 	文字化けするのでTeraTermでの通信を推奨
-	This program was written by Visual Studio 2015
 */
-#include "TestPrograms.h"
 #include "PinAssignment.h"
-#include "SerialFunction.h"
-#include <string>
 
+//変数定義
+//ピン名を配列に入れる(初期化関数で使うため)
+//TODO:全てのピンを適切な配列に入れる(面倒)
+const int outputPins[5] = { 8, 9 ,TL_0, TL_1, TL_2 };
+const int inputPins[1] = { 2 };
+char command = NULL;
+bool checkTestFinished = true;
 bool ledState = true;
 
 //プロトタイプ宣言
