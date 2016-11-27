@@ -15,7 +15,7 @@ public:
 	//処理メソッド
 	void Processor()
 	{
-		//共通部分であるwhile、menu()、commandを記述
+		//共通部分であるwhile、menu()を記述
 		while (true)
 		{
 			readSerialEnd();
@@ -86,12 +86,12 @@ public:
 	{
 		count++;
 		ledFlashBinary();
-		delay(1000);
+		flashLED(13, 1000);
 		count = count >= 8 ? 0 : count;
 	}
 private:
 	int count;
-	int pins[3] = { TL_0,TL_1,TL_2 };
+	int pins[3] = {TL_0,TL_1,TL_2};
 
 	void ledFlashBinary()
 	{
@@ -128,7 +128,7 @@ public:
 
 //子クラスをインスタンス化
 //これで新しいクラスができても変更が楽
-Program *pTests[5] = { new Motor, new Uss, new Ir, new Encoder, new Mp3 };
+Program *pTests[6] = { new Motor, new Uss, new Ir,new Tape, new Encoder, new Mp3 };
 
 void selector() {
 	//コマンドの文字によって子クラスのポインタを親クラスへ代入
