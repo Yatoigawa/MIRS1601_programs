@@ -51,6 +51,7 @@ class Motor : public Program
 {
 public:
 	Motor() {};
+
 	void process()
 	{
 
@@ -80,12 +81,28 @@ public:
 class Tape : public Program
 {
 public:
-	int counter;
-
 	Tape() {};
 	void process()
 	{
+		count++;
+		ledFlashBinary();
+		delay(1000);
+		count = count >= 8 ? 0 : count;
+	}
+private:
+	int count;
+	int pins[3] = { TL_0,TL_1,TL_2 };
 
+	void ledFlashBinary()
+	{
+		int i, j;
+		byte state;
+		for (i = 0, j = 1; i < sizeof(pins) / sizeof(pins[0]); i++, j = j * 2)
+		{
+			//この()は重要。ないと挙動がおかしくなる。
+			state = (count & j) > 0 ? HIGH : LOW;
+			digitalWrite(pins[i], state);
+		}
 	}
 };
 
