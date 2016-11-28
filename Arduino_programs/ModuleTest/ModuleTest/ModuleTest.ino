@@ -39,7 +39,7 @@ void loop() {
 	flashLED(13, 100);
 }
 
-void flashLED(int pin, int delayTime) {
+inline void flashLED(int pin, int delayTime) {
 	byte s = ledState ? HIGH : LOW;
 	digitalWrite(pin, s);
 	ledState = !ledState;

@@ -16,27 +16,22 @@ public:
 	void Processor()
 	{
 		//共通部分であるwhile、menu()を記述
+		Serial.println(F("Test started"));
+		delay(500);
 		while (true)
 		{
-			readSerialEnd();
-			if (isEnd)
+			keyCommand = Serial.read();
+			if (keyCommand == 'e')
 			{
-				goto END;
+				break;
 			}
 			else {
 				//process()は純粋仮想関数で、このクラスには実装されていない
 				process();
 			}
+			keyCommand = NULL;
 		}
-	END:
-		isEnd = false;
 		menu();
-	}
-	void readSerialEnd()
-	{
-		if (Serial.read() == 'e') {
-			isEnd = true;
-		}
 	}
 
 protected:
@@ -44,14 +39,14 @@ protected:
 	virtual void process() = 0;
 
 private:
-	bool isEnd = false;
+	char keyCommand = NULL;
 };
 
 class Motor : public Program
 {
 public:
 	Motor() {};
-
+	~Motor() {};
 	void process()
 	{
 
@@ -62,6 +57,7 @@ class Uss : public Program
 {
 public:
 	Uss() {};
+	~Uss() {};
 	void process()
 	{
 
@@ -72,6 +68,7 @@ class Ir : public Program
 {
 public:
 	Ir() {};
+	~Ir() {};
 	void process()
 	{
 
@@ -82,6 +79,7 @@ class Tape : public Program
 {
 public:
 	Tape() {};
+	~Tape() {};
 	void process()
 	{
 		count++;
@@ -93,7 +91,7 @@ private:
 	int count;
 	int pins[3] = {TL_0,TL_1,TL_2};
 
-	void ledFlashBinary()
+	inline void ledFlashBinary()
 	{
 		int i, j;
 		byte state;
@@ -110,6 +108,7 @@ class Encoder : public Program
 {
 public:
 	Encoder() {};
+	~Encoder() {};
 	void process()
 	{
 
@@ -120,6 +119,7 @@ class Mp3 : public Program
 {
 public:
 	Mp3() {};
+	~Mp3() {};
 	void process()
 	{
 

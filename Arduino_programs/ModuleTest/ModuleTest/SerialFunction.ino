@@ -1,10 +1,10 @@
 void menu() {
-	Serial.println("モジュール基板テストプログラム");
-	Serial.println("以下のメニューからテストする基板を選んでください");
-	Serial.println("m:モーター");
-	Serial.println("u:超音波センサ");
-	Serial.println("i:赤外線センサ");
-	Serial.println("t:テープLED");
-	Serial.println("e:エンコーダ");
-	Serial.println("M:MP3再生");
+	Serial.println(F("Module Circuit Test Program"));
+	Serial.println(F("COMMANDS:"));
+	Serial.println(F("[m] Motor"));
+	Serial.println(F("[u] Ultrasonic sensor"));
+	Serial.println(F("[i] Infrared sensor"));
+	Serial.println(F("[t] Tape LED"));
+	Serial.println(F("[e] Encoder"));
+	Serial.println(F("[M] MP3 player"));
 }
