@@ -1,23 +1,35 @@
 /*
 各種テストプログラムがあるファイル
+
+***テストプログラムの実装方法***
+TestPrograms.inoに各テストプログラムのクラスがあります。
+各クラスにprocessメソッドがあるので、中に処理内容を実装してください。
+必要に応じてフィールドやメソッドを追加しても構いませんが、誤動作を防ぐためにも全てprivateで宣言してください。
 */
 #include "Arduino.h"
 #include "PinAssignment.h"
+//#include <arduino_L298N-master\L298N.h>
 
 /*
 各クラスの実装
 TODO:クラスの実装
 */
 
-class Program
+class AbstructProgram
 {
 public:
 	//処理メソッド
 	void Processor()
 	{
 		//共通部分であるwhile、menu()を記述
-		Serial.println(F("Test started"));
-		delay(500);
+		Serial.print(F("Test : "));
+		Serial.println(command, HEX);
+		Serial.println(F("COMMANDS:"));
+		Serial.println(F("[e] Finish test"));
+		testMenu();
+		Serial.println(F("Please press any key to start"));
+		while (Serial.available() == 0) {}
+		Serial.flush();
 		while (true)
 		{
 			keyCommand = Serial.read();
@@ -36,50 +48,99 @@ public:
 
 protected:
 	//この関数をオーバーライドすることで、子クラス(各テストプログラム)によって処理を変えられる
-	virtual void process() = 0;
-
+	virtual inline void process() = 0;
+	virtual void testMenu() = 0;
 private:
 	char keyCommand = NULL;
 };
 
-class Motor : public Program
+class Motor : public AbstructProgram
 {
 public:
 	Motor() {};
 	~Motor() {};
+
+private:
 	void process()
+	{
+
+	}
+	void testMenu()
 	{
 
 	}
 };
 
-class Uss : public Program
+class Uss : public AbstructProgram
 {
 public:
 	Uss() {};
 	~Uss() {};
+
+private:
+	long duration;
+	long cm[4];
+	int ussPins[4] = { USS_N, USS_E, USS_S, USS_W };
+
 	void process()
 	{
+		// PING)))による距離計測ルーチン
+		for (int i = 0; i < sizeof(ussPins) / sizeof(ussPins[0]); i++)
+		{
+			pinMode(ussPins[i], OUTPUT);
+			digitalWrite(ussPins[i], LOW);
+			delayMicroseconds(2);
+			digitalWrite(ussPins[i], HIGH);
+			delayMicroseconds(5);
+			digitalWrite(ussPins[i], LOW);
 
+			pinMode(ussPins[i], INPUT);
+			duration = pulseIn(ussPins[i], HIGH);
+			cm[i] = microsecondsToCentimeters(duration);
+		}
+		Serial.print("N: ");
+		Serial.print(cm[0]);
+		Serial.print("cm E: ");
+		Serial.print(cm[1]);
+		Serial.print("cm S: ");
+		Serial.print(cm[2]);
+		Serial.print("cm W: ");
+		Serial.print(cm[3]);
+		Serial.println("cm");
+		flashLED(13, 100);
 	}
+	inline long microsecondsToCentimeters(long microseconds) {
+		return microseconds / 29 / 2;
+	}
+	void testMenu() {}
 };
 
-class Ir : public Program
+class Ir : public AbstructProgram
 {
 public:
 	Ir() {};
 	~Ir() {};
+
+private:
 	void process()
 	{
 
 	}
+	void testMenu() {
+
+	}
 };
 
-class Tape : public Program
+class Tape : public AbstructProgram
 {
 public:
 	Tape() {};
 	~Tape() {};
+
+private:
+	int count;
+	int tlPins[3] = { TL_0,TL_1,TL_2 };
+
 	void process()
 	{
 		count++;
@@ -87,40 +148,49 @@ public:
 		flashLED(13, 1000);
 		count = count >= 8 ? 0 : count;
 	}
-private:
-	int count;
-	int pins[3] = {TL_0,TL_1,TL_2};
-
 	inline void ledFlashBinary()
 	{
 		int i, j;
 		byte state;
-		for (i = 0, j = 1; i < sizeof(pins) / sizeof(pins[0]); i++, j = j * 2)
+		for (i = 0, j = 1; i < sizeof(tlPins) / sizeof(tlPins[0]); i++, j = j * 2)
 		{
 			//この()は重要。ないと挙動がおかしくなる。
 			state = (count & j) > 0 ? HIGH : LOW;
-			digitalWrite(pins[i], state);
+			digitalWrite(tlPins[i], state);
 		}
 	}
+	void testMenu() {}
 };
 
-class Encoder : public Program
+class Encoder : public AbstructProgram
 {
 public:
 	Encoder() {};
 	~Encoder() {};
+
+private:
 	void process()
+	{
+
+	}
+	void testMenu()
 	{
 
 	}
 };
 
-class Mp3 : public Program
+class Mp3 : public AbstructProgram
 {
 public:
 	Mp3() {};
 	~Mp3() {};
+
+private:
 	void process()
+	{
+
+	}
+	void testMenu()
 	{
 
 	}
@@ -128,7 +198,7 @@ public:
 
 //子クラスをインスタンス化
 //これで新しいクラスができても変更が楽
-Program *pTests[6] = { new Motor, new Uss, new Ir,new Tape, new Encoder, new Mp3 };
+AbstructProgram *pTests[6] = { new Motor, new Uss, new Ir,new Tape, new Encoder, new Mp3 };
 
 void selector() {
 	//コマンドの文字によって子クラスのポインタを親クラスへ代入
