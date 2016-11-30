@@ -8,7 +8,7 @@ TestPrograms.inoに各テストプログラムのクラスがあります。
 */
 #include "Arduino.h"
 #include "PinAssignment.h"
-//#include <arduino_L298N-master\L298N.h>
+#include <L298N.h>
 
 /*
 各クラスの実装
@@ -18,6 +18,8 @@ TODO:クラスの実装
 class AbstructProgram
 {
 public:
+	char keyCommand = NULL;
+
 	//処理メソッド
 	void Processor()
 	{
@@ -48,10 +50,8 @@ public:
 
 protected:
 	//この関数をオーバーライドすることで、子クラス(各テストプログラム)によって処理を変えられる
-	virtual inline void process() = 0;
 	virtual void testMenu() = 0;
-private:
-	char keyCommand = NULL;
+	virtual inline void process() = 0;
 };
 
 class Motor : public AbstructProgram
@@ -61,13 +61,57 @@ public:
 	~Motor() {};
 
 private:
-	void process()
-	{
+	int timeDelay = 500;
+	int speed = 150;
 
-	}
 	void testMenu()
 	{
-
+		Serial.println(F("[f] forward"));
+		Serial.println(F("[b] backward"));
+		Serial.println(F("[r] turn right"));
+		Serial.println(F("[l] turn left"));
+		Serial.println(F("[s] full stop"));
+		Serial.println(F("[+] speed up"));
+		Serial.println(F("[-] speed down"));
+	}
+	void process()
+	{
+		switch (keyCommand)
+		{
+		case 'f':
+			Serial.println(F("forward"));
+			driver1.forward(speed,timeDelay);
+			break;
+		case 'b':
+			Serial.println(F("backward"));
+			driver1.backward(speed,timeDelay);
+			break;
+		case 'r':
+			Serial.println(F("turn right"));
+			driver1.turn_right(speed, timeDelay);
+			break;
+		case 'l':
+			Serial.println(F("turn left"));
+			driver1.turn_left(speed, timeDelay);
+			break;
+		case 's':
+			Serial.println(F("full stop"));
+			driver1.full_stop(timeDelay);
+			break;
+		case '+':
+			speed += 10;
+			Serial.print(F("speed up: "));
+			Serial.println(speed);
+			break;
+		case '-':
+			speed -= 10;
+			Serial.print(F("speed down: "));
+			Serial.println(speed);
+			break;
+		default:
+			flashLED(13, 100);
+			break;
+		}
 	}
 };
 
@@ -82,10 +126,11 @@ private:
 	long cm[4];
 	int ussPins[4] = { USS_N, USS_E, USS_S, USS_W };
 
+	void testMenu() {}
 	void process()
 	{
 		// PING)))による距離計測ルーチン
-		for (int i = 0; i < sizeof(ussPins) / sizeof(ussPins[0]); i++)
+		for (int i = 0; i < sizeof(ussPins) / sizeof(ussPins[0]); ++i)
 		{
 			pinMode(ussPins[i], OUTPUT);
 			digitalWrite(ussPins[i], LOW);
@@ -110,9 +155,9 @@ private:
 		flashLED(13, 100);
 	}
 	inline long microsecondsToCentimeters(long microseconds) {
-		return microseconds / 29 / 2;
+		//return microseconds / 29 / 2
+		return microseconds * 0.03448275862069 * 0.5;
 	}
-	void testMenu() {}
 };
 
 class Ir : public AbstructProgram
@@ -122,11 +167,12 @@ public:
 	~Ir() {};
 
 private:
-	void process()
+	void testMenu()
 	{
 
 	}
-	void testMenu() {
+	void process()
+	{
 
 	}
 };
@@ -141,6 +187,7 @@ private:
 	int count;
 	int tlPins[3] = { TL_0,TL_1,TL_2 };
 
+	void testMenu() {}
 	void process()
 	{
 		count++;
@@ -159,7 +206,6 @@ private:
 			digitalWrite(tlPins[i], state);
 		}
 	}
-	void testMenu() {}
 };
 
 class Encoder : public AbstructProgram
@@ -169,11 +215,11 @@ public:
 	~Encoder() {};
 
 private:
-	void process()
+	void testMenu()
 	{
 
 	}
-	void testMenu()
+	void process()
 	{
 
 	}
@@ -186,11 +232,11 @@ public:
 	~Mp3() {};
 
 private:
-	void process()
+	void testMenu()
 	{
 
 	}
-	void testMenu()
+	void process()
 	{
 
 	}
