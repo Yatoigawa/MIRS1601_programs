@@ -1,11 +1,11 @@
-/*
+ï»¿/*
 file   : BlinkLED_binary.h
 Create : 2016/12/02
 Author : R. Hirayama
 Board  : Arduino Due
 
 feture :
-0~8‚Ì”š‚ğ3bit‚Ì2i”‚ÉƒGƒ“ƒR[ƒh‚µ‚½ŒãAŠeŒ…‚É‘Î‰‚·‚éLED‚ğŒõ‚ç‚¹‚Ü‚·B
+0~8ã®æ•°å­—ã‚’3bitã®2é€²æ•°ã«ã‚¨ãƒ³ã‚³ãƒ¼ãƒ‰ã—ãŸå¾Œã€å„æ¡ã«å¯¾å¿œã™ã‚‹LEDã‚’å…‰ã‚‰ã›ã¾ã™ã€‚
 */
 
 #ifndef _TAPELED_h
@@ -25,7 +25,7 @@ public:
 		byte state;
 		for (i = 0, j = 1; i < sizeof(this->_LED) / sizeof(this->_LED[0]); i++, j = j * 2)
 		{
-			//‚±‚Ì()‚Íd—vB‚È‚¢‚Æ‹““®‚ª‚¨‚©‚µ‚­‚È‚é
+			//ã“ã®()ã¯é‡è¦ã€‚ãªã„ã¨æŒ™å‹•ãŒãŠã‹ã—ããªã‚‹
 			state = (dec & j) > 0 ? HIGH : LOW;
 			digitalWrite(this->_LED[i], state);
 		}

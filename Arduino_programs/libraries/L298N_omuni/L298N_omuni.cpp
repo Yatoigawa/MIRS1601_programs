@@ -1,13 +1,13 @@
-/*
+ï»¿/*
 file   : L298N_omuni.cpp
 Create : 2016/12/02
 Author : R. Hirayama
 Board  : Arduino Due
 
 feture :
-2‚Â‚ÌL298N‚Å4ŒÂ‚Ìƒ‚[ƒ^[‚ğ§Œä‚µ‚Ü‚·B
-‚ ‚ç‚©‚¶‚ß‘OŒã¶‰EA¶‰EÎ‚ß‘OEŒã‚ëA¶‰Eù‰ñ‚ªŠÈ’P‚Éo—ˆ‚é—l‚É‚È‚Á‚Ä‚¢‚Ü‚·B
-setupMotorAdriveMotorŠÖ”‚ğ’¼Úg—p‚·‚é‚±‚Æ‚ÅAƒ‚[ƒ^[‚ğD‚«‚È‚æ‚¤‚É“®‚©‚¹‚Ü‚·B
+2ã¤ã®L298Nã§4å€‹ã®ãƒ¢ãƒ¼ã‚¿ãƒ¼ã‚’åˆ¶å¾¡ã—ã¾ã™ã€‚
+ã‚ã‚‰ã‹ã˜ã‚å‰å¾Œå·¦å³ã€å·¦å³æ–œã‚å‰ãƒ»å¾Œã‚ã€å·¦å³æ—‹å›ãŒç°¡å˜ã«å‡ºæ¥ã‚‹æ§˜ã«ãªã£ã¦ã„ã¾ã™ã€‚
+setupMotorã€driveMotoré–¢æ•°ã‚’ç›´æ¥ä½¿ç”¨ã™ã‚‹ã“ã¨ã§ã€ãƒ¢ãƒ¼ã‚¿ãƒ¼ã‚’å¥½ããªã‚ˆã†ã«å‹•ã‹ã›ã¾ã™ã€‚
 */
 #include "Arduino.h"
 #include "L298N_omuni.h"
@@ -56,7 +56,7 @@ L298N_omuni::L298N_omuni(int A_ena, int A_in1, int A_in2, int A_in3, int A_in4, 
 }
 
 /*
-–kA“Œ‚ğ³‚Æ‚·‚é
+åŒ—ã€æ±ã‚’æ­£ã¨ã™ã‚‹
 NSEW
 N_in1,N_in2,S_in1,S_in2,E_in1,E_in2,W_in1,W_in2
 */

@@ -1,10 +1,10 @@
-/*
-ƒsƒ“‚Ì‰Šú‰»‚ğ‚·‚éƒtƒ@ƒCƒ‹
+ï»¿/*
+ãƒ”ãƒ³ã®åˆæœŸåŒ–ã‚’ã™ã‚‹ãƒ•ã‚¡ã‚¤ãƒ«
 */
 #include "Arduino.h"
 #include "PinAssignment.h"
 
-//‰Šú‰»ŠÖ”’è‹`
+//åˆæœŸåŒ–é–¢æ•°å®šç¾©
 void initPinAssiment(const int Pins[], byte io) {
 	for (int i = 0; i < sizeof(Pins) / sizeof(Pins[0]); i++)
 	{

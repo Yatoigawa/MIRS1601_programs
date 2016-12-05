@@ -1,17 +1,17 @@
-/*
+ï»¿/*
 file   : BlinkLED_binary.cpp
 Create : 2016/12/02
 Author : R. Hirayama
 Board  : Arduino Due
 
 feture :
-0~8‚Ì”š‚ğ3bit‚Ì2i”‚ÉƒGƒ“ƒR[ƒh‚µ‚½ŒãAŠeŒ…‚É‘Î‰‚·‚éLED‚ğŒõ‚ç‚¹‚Ü‚·B
+0~8ã®æ•°å­—ã‚’3bitã®2é€²æ•°ã«ã‚¨ãƒ³ã‚³ãƒ¼ãƒ‰ã—ãŸå¾Œã€å„æ¡ã«å¯¾å¿œã™ã‚‹LEDã‚’å…‰ã‚‰ã›ã¾ã™ã€‚
 */
 
 #include "Arduino.h"
 #include "BlinkLED_binary.h"
 
-//‰Šú‰»qƒŠƒXƒg C++0xˆÈ~‚Å‚È‚¢‚Æg‚¦‚È‚¢–Í—l
+//åˆæœŸåŒ–å­ãƒªã‚¹ãƒˆ C++0xä»¥é™ã§ãªã„ã¨ä½¿ãˆãªã„æ¨¡æ§˜
 BlinkLED_binary::BlinkLED_binary(int LED1, int LED2, int LED3) : _LED{ LED1,LED2,LED3 }
 {
 	pinMode(LED1, OUTPUT);

@@ -1,13 +1,13 @@
-/*
+﻿/*
 file   : L298N_omuni.h
 Create : 2016/12/02
 Author : R. Hirayama
 Board  : Arduino Due
 
 feture :
-2��L298N��4�̃��[�^�[�𐧌䂵�܂��B
-���炩���ߑO�㍶�E�A���E�΂ߑO�E���A���E���񂪊ȒP�ɏo����l�ɂȂ��Ă��܂��B
-setupMotor�AdriveMotor�֐��𒼐ڎg�p���邱�ƂŁA���[�^�[���D���Ȃ悤�ɓ������܂��B
+2つのL298Nで4個のモーターを制御します。
+あらかじめ前後左右、左右斜め前・後ろ、左右旋回が簡単に出来る様になっています。
+setupMotor、driveMotor関数を直接使用することで、モーターを好きなように動かせます。
 */
 #ifndef _L298N_OMUNI_h
 #define _L298N_OMUNI_h

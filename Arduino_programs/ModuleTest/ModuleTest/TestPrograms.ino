@@ -1,18 +1,18 @@
-/*
-ŠeŽíƒeƒXƒgƒvƒƒOƒ‰ƒ€‚ª‚ ‚éƒtƒ@ƒCƒ‹
+ï»¿/*
+å„ç¨®ãƒ†ã‚¹ãƒˆãƒ—ãƒ­ã‚°ãƒ©ãƒ ãŒã‚ã‚‹ãƒ•ã‚¡ã‚¤ãƒ«
 
-***ƒeƒXƒgƒvƒƒOƒ‰ƒ€‚ÌŽÀ‘••û–@***
-TestPrograms.ino‚ÉŠeƒeƒXƒgƒvƒƒOƒ‰ƒ€‚ÌƒNƒ‰ƒX‚ª‚ ‚è‚Ü‚·B
-ŠeƒNƒ‰ƒX‚Éprocessƒƒ\ƒbƒh‚ª‚ ‚é‚Ì‚ÅA’†‚Éˆ—“à—e‚ðŽÀ‘•‚µ‚Ä‚­‚¾‚³‚¢B
-•K—v‚É‰ž‚¶‚ÄƒtƒB[ƒ‹ƒh‚âƒƒ\ƒbƒh‚ð’Ç‰Á‚µ‚Ä‚à\‚¢‚Ü‚¹‚ñ‚ªAŒë“®ì‚ð–h‚®‚½‚ß‚É‚à‘S‚Äprivate‚ÅéŒ¾‚µ‚Ä‚­‚¾‚³‚¢B
+***ãƒ†ã‚¹ãƒˆãƒ—ãƒ­ã‚°ãƒ©ãƒ ã®å®Ÿè£…æ–¹æ³•***
+TestPrograms.inoã«å„ãƒ†ã‚¹ãƒˆãƒ—ãƒ­ã‚°ãƒ©ãƒ ã®ã‚¯ãƒ©ã‚¹ãŒã‚ã‚Šã¾ã™ã€‚
+å„ã‚¯ãƒ©ã‚¹ã«processãƒ¡ã‚½ãƒƒãƒ‰ãŒã‚ã‚‹ã®ã§ã€ä¸­ã«å‡¦ç†å†…å®¹ã‚’å®Ÿè£…ã—ã¦ãã ã•ã„ã€‚
+å¿…è¦ã«å¿œã˜ã¦ãƒ•ã‚£ãƒ¼ãƒ«ãƒ‰ã‚„ãƒ¡ã‚½ãƒƒãƒ‰ã‚’è¿½åŠ ã—ã¦ã‚‚æ§‹ã„ã¾ã›ã‚“ãŒã€èª¤å‹•ä½œã‚’é˜²ããŸã‚ã«ã‚‚å…¨ã¦privateã§å®£è¨€ã—ã¦ãã ã•ã„ã€‚
 */
 #include "Arduino.h"
 #include "PinAssignment.h"
 #include <L298N.h>
 
 /*
-ŠeƒNƒ‰ƒX‚ÌŽÀ‘•
-TODO:ƒNƒ‰ƒX‚ÌŽÀ‘•
+å„ã‚¯ãƒ©ã‚¹ã®å®Ÿè£…
+TODO:ã‚¯ãƒ©ã‚¹ã®å®Ÿè£…
 */
 
 class AbstructProgram
@@ -20,10 +20,10 @@ class AbstructProgram
 public:
 	char keyCommand = NULL;
 
-	//ˆ—ƒƒ\ƒbƒh
+	//å‡¦ç†ãƒ¡ã‚½ãƒƒãƒ‰
 	void Processor()
 	{
-		//‹¤’Ê•”•ª‚Å‚ ‚éwhileAmenu()‚ð‹Lq
+		//å…±é€šéƒ¨åˆ†ã§ã‚ã‚‹whileã€menu()ã‚’è¨˜è¿°
 		Serial.print(F("Test : "));
 		Serial.println(command, HEX);
 		Serial.println(F("COMMANDS:"));
@@ -40,7 +40,7 @@ public:
 				break;
 			}
 			else {
-				//process()‚Íƒˆ‰¼‘zŠÖ”‚ÅA‚±‚ÌƒNƒ‰ƒX‚É‚ÍŽÀ‘•‚³‚ê‚Ä‚¢‚È‚¢
+				//process()ã¯ç´”ç²‹ä»®æƒ³é–¢æ•°ã§ã€ã“ã®ã‚¯ãƒ©ã‚¹ã«ã¯å®Ÿè£…ã•ã‚Œã¦ã„ãªã„
 				process();
 			}
 			keyCommand = NULL;
@@ -49,7 +49,7 @@ public:
 	}
 
 protected:
-	//‚±‚ÌŠÖ”‚ðƒI[ƒo[ƒ‰ƒCƒh‚·‚é‚±‚Æ‚ÅAŽqƒNƒ‰ƒX(ŠeƒeƒXƒgƒvƒƒOƒ‰ƒ€)‚É‚æ‚Á‚Äˆ—‚ð•Ï‚¦‚ç‚ê‚é
+	//ã“ã®é–¢æ•°ã‚’ã‚ªãƒ¼ãƒãƒ¼ãƒ©ã‚¤ãƒ‰ã™ã‚‹ã“ã¨ã§ã€å­ã‚¯ãƒ©ã‚¹(å„ãƒ†ã‚¹ãƒˆãƒ—ãƒ­ã‚°ãƒ©ãƒ )ã«ã‚ˆã£ã¦å‡¦ç†ã‚’å¤‰ãˆã‚‰ã‚Œã‚‹
 	virtual void testMenu() = 0;
 	virtual inline void process() = 0;
 };
@@ -129,7 +129,7 @@ private:
 	void testMenu() {}
 	void process()
 	{
-		// PING)))‚É‚æ‚é‹——£Œv‘ªƒ‹[ƒ`ƒ“
+		// PING)))ã«ã‚ˆã‚‹è·é›¢è¨ˆæ¸¬ãƒ«ãƒ¼ãƒãƒ³
 		for (int i = 0; i < sizeof(ussPins) / sizeof(ussPins[0]); ++i)
 		{
 			pinMode(ussPins[i], OUTPUT);
@@ -201,7 +201,7 @@ private:
 		byte state;
 		for (i = 0, j = 1; i < sizeof(tlPins) / sizeof(tlPins[0]); i++, j = j * 2)
 		{
-			//‚±‚Ì()‚Íd—vB‚È‚¢‚Æ‹““®‚ª‚¨‚©‚µ‚­‚È‚éB
+			//ã“ã®()ã¯é‡è¦ã€‚ãªã„ã¨æŒ™å‹•ãŒãŠã‹ã—ããªã‚‹ã€‚
 			state = (count & j) > 0 ? HIGH : LOW;
 			digitalWrite(tlPins[i], state);
 		}
@@ -242,12 +242,12 @@ private:
 	}
 };
 
-//ŽqƒNƒ‰ƒX‚ðƒCƒ“ƒXƒ^ƒ“ƒX‰»
-//‚±‚ê‚ÅV‚µ‚¢ƒNƒ‰ƒX‚ª‚Å‚«‚Ä‚à•ÏX‚ªŠy
+//å­ã‚¯ãƒ©ã‚¹ã‚’ã‚¤ãƒ³ã‚¹ã‚¿ãƒ³ã‚¹åŒ–
+//ã“ã‚Œã§æ–°ã—ã„ã‚¯ãƒ©ã‚¹ãŒã§ãã¦ã‚‚å¤‰æ›´ãŒæ¥½
 AbstructProgram *pTests[6] = { new Motor, new Uss, new Ir,new Tape, new Encoder, new Mp3 };
 
 void selector() {
-	//ƒRƒ}ƒ“ƒh‚Ì•¶Žš‚É‚æ‚Á‚ÄŽqƒNƒ‰ƒX‚Ìƒ|ƒCƒ“ƒ^‚ðeƒNƒ‰ƒX‚Ö‘ã“ü
+	//ã‚³ãƒžãƒ³ãƒ‰ã®æ–‡å­—ã«ã‚ˆã£ã¦å­ã‚¯ãƒ©ã‚¹ã®ãƒã‚¤ãƒ³ã‚¿ã‚’è¦ªã‚¯ãƒ©ã‚¹ã¸ä»£å…¥
 	switch (command)
 	{
 	case 'm':
@@ -275,7 +275,7 @@ void selector() {
 		break;
 
 	default:
-		//‚È‚É‚àˆ—‚µ‚È‚¢
+		//ãªã«ã‚‚å‡¦ç†ã—ãªã„
 		break;
 	}
 	command = NULL;
