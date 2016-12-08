@@ -1,6 +1,6 @@
 /*
-	ピンファイル
-	バス回路のピン配置に基づいて設定しているのでピン番号を勝手に変えないでください
+ピンファイル
+バス回路のピン配置に基づいて設定しているのでピン番号を勝手に変えないでください
 */
 
 //インクルードガード...重複インクルードを避ける
@@ -9,21 +9,14 @@
 
 #include "Arduino.h"
 
-//変数宣言
-extern const int outputPins[];
-extern const int inputPins[];
-
-//プロトタイプ宣言
-void initPinAssiment(const int Pins[], byte io);
-
 //TODO:適切なピン名に変更する
 //MOTOR
-#define MTR_A1 26 //Dingtal
-#define MTR_A2 27
-#define MTR_A3 28
-#define MTR_B1 29
-#define MTR_B2 30
-#define MTR_B3 31
+#define MTR_1ENA 26 //Dingtal
+#define MTR_1ENB 27
+#define MTR_2ENA 29
+#define MTR_2ENB 30
+//#define MTR_A3 28
+//#define MTR_B3 31
 #define P_N1 2  //PWM
 #define P_N2 3
 #define P_E1 4
