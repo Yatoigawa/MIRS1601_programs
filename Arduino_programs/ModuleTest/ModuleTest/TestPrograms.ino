@@ -8,7 +8,6 @@ TestPrograms.inoに各テストプログラムのクラスがあります。
 */
 #include "Arduino.h"
 #include "PinAssignment.h"
-#include <L298N.h>
 
 /*
 各クラスの実装
@@ -21,14 +20,14 @@ public:
 	char keyCommand = NULL;
 
 	//処理メソッド
-	void Processor()
+	void Processor(char command)
 	{
 		//共通部分であるwhile、menu()を記述
 		Serial.print(F("Test : "));
 		Serial.println(command, HEX);
 		Serial.println(F("COMMANDS:"));
 		Serial.println(F("[e] Finish test"));
-		testMenu();
+		this->testMenu();
 		Serial.println(F("Please press any key to start"));
 		while (Serial.available() == 0) {}
 		Serial.flush();
@@ -41,7 +40,7 @@ public:
 			}
 			else {
 				//process()は純粋仮想関数で、このクラスには実装されていない
-				process();
+				this->process();
 			}
 			keyCommand = NULL;
 		}
@@ -66,51 +65,96 @@ private:
 
 	void testMenu()
 	{
-		Serial.println(F("[f] forward"));
-		Serial.println(F("[b] backward"));
-		Serial.println(F("[r] turn right"));
-		Serial.println(F("[l] turn left"));
-		Serial.println(F("[s] full stop"));
+		Serial.println(F("[8] forward"));
+		Serial.println(F("[2] backward"));
+		Serial.println(F("[6] right"));
+		Serial.println(F("[4] left"));
+		Serial.println(F("[9] rightForward"));
+		Serial.println(F("[3] rightBackward"));
+		Serial.println(F("[7] leftForward"));
+		Serial.println(F("[1] leftBackward"));
+		Serial.println(F("[*] turnRight"));
+		Serial.println(F("[/] turnLeft"));
+		Serial.println(F("[5] full stop"));
 		Serial.println(F("[+] speed up"));
 		Serial.println(F("[-] speed down"));
+		Serial.println(F("Caution : Please use the numeric keypad"));
 	}
 	void process()
 	{
 		switch (keyCommand)
 		{
-		case 'f':
+			//テンキーでほとんどを操作
+		case '8':
 			Serial.println(F("forward"));
-			driver1.forward(speed,timeDelay);
+			omuni.forward(this->speed, timeDelay);
 			break;
-		case 'b':
+		case '2':
 			Serial.println(F("backward"));
-			driver1.backward(speed,timeDelay);
+			omuni.backward(this->speed, timeDelay);
 			break;
-		case 'r':
-			Serial.println(F("turn right"));
-			driver1.turn_right(speed, timeDelay);
+		case '6':
+			Serial.println(F("right"));
+			omuni.right(this->speed, timeDelay);
 			break;
-		case 'l':
-			Serial.println(F("turn left"));
-			driver1.turn_left(speed, timeDelay);
+		case '4':
+			Serial.println(F("left"));
+			omuni.left(this->speed, timeDelay);
 			break;
-		case 's':
+		case '9':
+			Serial.println(F("rightForward"));
+			omuni.rightForward(speed, timeDelay);
+			break;
+		case '3':
+			Serial.println(F("rightBackward"));
+			omuni.rightBackward(speed, timeDelay);
+			break;
+		case '7':
+			Serial.println(F("leftForward"));
+			omuni.leftForward(speed, timeDelay);
+			break;
+		case '1':
+			Serial.println(F("leftBackward"));
+			omuni.leftBackward(speed, timeDelay);
+			break;
+		case '*':
+			Serial.println(F("turnRight"));
+			omuni.turnRight(speed, timeDelay);
+			break;
+		case '/':
+			Serial.println(F("turnLeft"));
+			omuni.turnLeft(speed, timeDelay);
+			break;
+		case '5':
 			Serial.println(F("full stop"));
-			driver1.full_stop(timeDelay);
+			omuni.fullStop(timeDelay);
 			break;
 		case '+':
-			speed += 10;
+			this->speed += 10;
+			this->isSafeSpeed();
 			Serial.print(F("speed up: "));
-			Serial.println(speed);
+			Serial.println(this->speed);
 			break;
 		case '-':
-			speed -= 10;
+			this->speed -= 10;
+			this->isSafeSpeed();
 			Serial.print(F("speed down: "));
-			Serial.println(speed);
+			Serial.println(this->speed);
 			break;
 		default:
 			flashLED(13, 100);
 			break;
+		}
+	}
+
+	void isSafeSpeed() {
+		if (this->speed > 225)
+		{
+			this->speed = 225;
+		}
+		if (this->speed < 0)
+		{
+			this->speed = 0;
 		}
 	}
 };
@@ -122,26 +166,14 @@ public:
 	~Uss() {};
 
 private:
-	long duration;
 	long cm[4];
-	int ussPins[4] = { USS_N, USS_E, USS_S, USS_W };
 
 	void testMenu() {}
 	void process()
 	{
-		// PING)))による距離計測ルーチン
-		for (int i = 0; i < sizeof(ussPins) / sizeof(ussPins[0]); ++i)
+		for (int i = 0; i < sizeof(ussArray) / sizeof(ussArray[0]); i++)
 		{
-			pinMode(ussPins[i], OUTPUT);
-			digitalWrite(ussPins[i], LOW);
-			delayMicroseconds(2);
-			digitalWrite(ussPins[i], HIGH);
-			delayMicroseconds(5);
-			digitalWrite(ussPins[i], LOW);
-
-			pinMode(ussPins[i], INPUT);
-			duration = pulseIn(ussPins[i], HIGH);
-			cm[i] = microsecondsToCentimeters(duration);
+			this->cm[i] = ussArray[i].getCM();
 		}
 		Serial.print("N: ");
 		Serial.print(cm[0]);
@@ -153,10 +185,6 @@ private:
 		Serial.print(cm[3]);
 		Serial.println("cm");
 		flashLED(13, 100);
-	}
-	inline long microsecondsToCentimeters(long microseconds) {
-		//return microseconds / 29 / 2
-		return microseconds * 0.03448275862069 * 0.5;
 	}
 };
 
@@ -185,26 +213,14 @@ public:
 
 private:
 	int count;
-	int tlPins[3] = { TL_0,TL_1,TL_2 };
 
 	void testMenu() {}
 	void process()
 	{
-		count++;
-		ledFlashBinary();
+		this->count++;
+		tapeLED.BlinkLED(this->count, 1000);
 		flashLED(13, 1000);
-		count = count >= 8 ? 0 : count;
-	}
-	inline void ledFlashBinary()
-	{
-		int i, j;
-		byte state;
-		for (i = 0, j = 1; i < sizeof(tlPins) / sizeof(tlPins[0]); i++, j = j * 2)
-		{
-			//この()は重要。ないと挙動がおかしくなる。
-			state = (count & j) > 0 ? HIGH : LOW;
-			digitalWrite(tlPins[i], state);
-		}
+		this->count = this->count >= 8 ? 0 : this->count;
 	}
 };
 
@@ -246,37 +262,36 @@ private:
 //これで新しいクラスができても変更が楽
 AbstructProgram *pTests[6] = { new Motor, new Uss, new Ir,new Tape, new Encoder, new Mp3 };
 
-void selector() {
+void selector(char command) {
 	//コマンドの文字によって子クラスのポインタを親クラスへ代入
 	switch (command)
 	{
 	case 'm':
-		pTests[0]->Processor();
+		pTests[0]->Processor(command);
 		break;
 
 	case 'u':
-		pTests[1]->Processor();
+		pTests[1]->Processor(command);
 		break;
 
 	case 'i':
-		pTests[2]->Processor();
+		pTests[2]->Processor(command);
 		break;
 
 	case 't':
-		pTests[3]->Processor();
+		pTests[3]->Processor(command);
 		break;
 
 	case 'e':
-		pTests[4]->Processor();
+		pTests[4]->Processor(command);
 		break;
 
 	case 'M':
-		pTests[5]->Processor();
+		pTests[5]->Processor(command);
 		break;
 
 	default:
 		//なにも処理しない
 		break;
 	}
-	command = NULL;
 }
