@@ -33,17 +33,16 @@ public:
 		Serial.flush();
 		while (true)
 		{
-			keyCommand = Serial.read();
-			if (keyCommand == 'e')
+			//process()は純粋仮想関数で、このクラスには実装されていない
+			this->process();
+
+			if (this->keyCommand == 'e')
 			{
 				break;
 			}
-			else {
-				//process()は純粋仮想関数で、このクラスには実装されていない
-				this->process();
-			}
-			keyCommand = NULL;
+			this->keyCommand = Serial.read();
 		}
+		this->keyCommand = NULL;
 		menu();
 	}
 
@@ -241,29 +240,122 @@ private:
 	}
 };
 
-class Mp3 : public AbstructProgram
+class WAV : public AbstructProgram
 {
 public:
-	Mp3() {};
-	~Mp3() {};
+	WAV() {};
+	~WAV() {};
 
 private:
+	int numList = 0;
+
 	void testMenu()
 	{
-
+		Serial.println(F("[s] Stop playing"));
+		Serial.println(F("Caution : You can NOT use the [e] command during music playback"));
 	}
 	void process()
 	{
+		initPlayer();
+		int count = 0;
 
+	START:
+		//選曲
+		Serial.print(F("Please input a music name : "));
+		while (Serial.available() == 0);
+		String musicName = Serial.readString();
+		Serial.println(musicName);
+		File myFile = SD.open(musicName);
+		if (!myFile) {
+			Serial.println(F("error opening"));
+			goto START;
+		}
+
+		const int S = 1024; // Number of samples to read in block
+		short buffer[S];
+
+		Serial.print(F("Playing"));
+		// until the file is not finished
+		while (myFile.available()) {
+			// read from the file into buffer
+			myFile.read(buffer, sizeof(buffer));
+
+			// Prepare samples
+			int volume = 1024;
+			Audio.prepare(buffer, S, volume);
+			// Feed samples to audio
+			Audio.write(buffer, S);
+
+			// Every 100 block print a '.'
+			count++;
+			if (count == 100) {
+				Serial.print(F("."));
+				count = 0;
+			}
+
+			//曲再生中のコマンド
+			if (Serial.available() != 0)
+			{
+				if (Serial.read() == 's')
+				{
+					Serial.println(F("Stop playing"));
+					break;
+				}
+				else if (Serial.read() == ' ')
+				{
+					Serial.println(F("Pause"));
+					while (Serial.read() != ' ');
+					Serial.println(F("Playing"));
+				}
+			}
+		}
+		myFile.close();
+		Audio.end();
+		Serial.println(F("End of file. Thank you for listening!"));
+		Serial.println(F("Do you want to end the test?"));
+		Serial.println(F("To exit, enter the [e] command"));
+		Serial.println(F("Please press any key"));
+		while (Serial.available() == 0);
+		if (Serial.read() == 'e') { this->keyCommand = 'e'; }
+		Serial.println(this->keyCommand);
+		delay(500);
+	}
+
+	void initPlayer() {
+		//オーディオ初期化
+		//サンプルレート88200bps, バッファ100ms
+		Audio.begin(88200, 100);
+
+		//ミュージックリスト表示
+		File root = SD.open("/");
+		printDirectory(root);
+		Serial.print(F("Number of the music : "));
+		Serial.println(this->numList);
+		root.close();
+	}
+
+	//ファイルを一覧表示
+	void printDirectory(File dir) {
+		this->numList = 0;
+		while (true) {
+			File entry = dir.openNextFile();
+			if (!entry) {
+				// no more files
+				break;
+			}
+			this->numList++;
+			Serial.println(entry.name());
+			entry.close();
+		}
 	}
 };
 
 //子クラスをインスタンス化
 //これで新しいクラスができても変更が楽
-AbstructProgram *pTests[6] = { new Motor, new Uss, new Ir,new Tape, new Encoder, new Mp3 };
+AbstructProgram *pTests[6] = { new Motor, new Uss, new Ir,new Tape, new Encoder, new WAV };
 
+//テスト内容を選択
 void selector(char command) {
-	//コマンドの文字によって子クラスのポインタを親クラスへ代入
 	switch (command)
 	{
 	case 'm':

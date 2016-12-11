@@ -3,9 +3,13 @@
 テストボードごとに書き換えるのは面倒なのでシリアル通信でテスト内容を変更する
 */
 #include "PinAssignment.h"
-#include <L298N_omuni\L298N_omuni.h>
-#include <BlinkLED_binary\BlinkLED_binary.h>
+#include <L298N_omuni.h>
+#include <BlinkLED_binary.h>
 #include <USS\USS.h>
+#include <SD.h>
+#include <SPI.h>
+#include <Audio.h>
+#include <string>
 
 //変数定義
 //ピン名を配列に入れる(初期化関数で使うため)
@@ -29,6 +33,13 @@ void setup() {
 	//initPinAssiment(outputPins, OUTPUT);
 	//initPinAssiment(inputPins, INPUT);
 	Serial.begin(9600);
+	//SDカード初期化
+	Serial.print("Initializing SD card...");
+	if (!SD.begin(4)) {
+		Serial.println(" failed!");
+		while (true);
+	}
+	Serial.println(" done.");
 	menu();
 }
 
