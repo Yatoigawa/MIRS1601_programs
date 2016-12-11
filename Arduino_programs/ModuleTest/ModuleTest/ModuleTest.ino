@@ -3,16 +3,25 @@
 テストボードごとに書き換えるのは面倒なのでシリアル通信でテスト内容を変更する
 */
 #include "PinAssignment.h"
-#include <L298N.h>
+#include <L298N_omuni.h>
+#include <BlinkLED_binary.h>
+#include <USS\USS.h>
+#include <SD.h>
+#include <SPI.h>
+#include <Audio.h>
+#include <string>
 
 //変数定義
 //ピン名を配列に入れる(初期化関数で使うため)
 //TODO:全てのピンを適切な配列に入れる(面倒)
-const int outputPins[3] = { TL_0, TL_1, TL_2 };
-const int inputPins[1] = { 12 };
-L298N driver1(MTR_1ENA, P_N1, P_N2, P_S1, P_S2, MTR_1ENB);
-L298N driver2(MTR_2ENA, P_E1, P_E2, P_W1, P_W2, MTR_2ENB);
-char command = NULL;
+//const int outputPins[] = { {} };
+//const int inputPins[] = { {} };
+
+L298N_omuni omuni = L298N_omuni(MTR_1ENA, MTR_N1, MTR_N2, MTR_S1, MTR_S2, MTR_1ENB,
+								MTR_2ENA, MTR_E1, MTR_E2, MTR_W1, MTR_W2, MTR_2ENB);
+USS ussArray[4] = { USS(USS_N),USS(USS_S),USS(USS_E),USS(USS_W) };
+BlinkLED_binary tapeLED = BlinkLED_binary(TL_0, TL_1, TL_2);
+
 bool checkTestFinished = true;
 bool ledState = true;
 
@@ -21,16 +30,23 @@ void flashLED(int pin, int delayTime);
 
 void setup() {
 	pinMode(13, OUTPUT);
-	initPinAssiment(outputPins, OUTPUT);
-	initPinAssiment(inputPins, INPUT);
+	//initPinAssiment(outputPins, OUTPUT);
+	//initPinAssiment(inputPins, INPUT);
 	Serial.begin(9600);
+	//SDカード初期化
+	Serial.print("Initializing SD card...");
+	if (!SD.begin(4)) {
+		Serial.println(" failed!");
+		while (true);
+	}
+	Serial.println(" done.");
 	menu();
 }
 
 void loop() {
-	command = Serial.read();
+	char command = Serial.read();
 
-	selector();
+	selector(command);
 
 	//動作確認用のLチカ
 	flashLED(13, 100);
