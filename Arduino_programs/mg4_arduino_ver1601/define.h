@@ -18,17 +18,14 @@ typedef struct {
 } command_data_t;
 
 /* ピン配置 */
-#define PIN_ENC_A_L  2
-#define PIN_ENC_B_L  4
-#define PIN_ENC_A_R  3
-#define PIN_ENC_B_R  7
-#define PIN_DIR_L    8
-#define PIN_PWM_L    9
-#define PIN_DIR_R   12
-#define PIN_PWM_R   11
-#define PIN_SW      10
-#define PIN_LED     13
-#define PIN_BATT    19
+
+/* 
+ *  エレキ詳細設計書
+ *  http://www2.denshi.numazu-ct.ac.jp/mirsdoc2/mirs1601/elec/num0001a/index.html 
+ *  
+ *  Atmel SAM3X / SAM3A Series datasheet
+ *  http://www.atmel.com/Images/Atmel-11057-32-bit-Cortex-M3-Microcontroller-SAM3X-SAM3A_Datasheet.pdf
+ */
 
 /* パラメータ */
 #define T_CTRL 10 // 動作周期 [ms]

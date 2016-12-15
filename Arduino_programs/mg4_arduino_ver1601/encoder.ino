@@ -1,4 +1,6 @@
 // 割り込みに使用する変数 (volatileをつけて宣言)
+static volatile long count_f = 0;
+static volatile long count_b = 0;
 static volatile long count_l = 0;
 static volatile long count_r = 0;
 
