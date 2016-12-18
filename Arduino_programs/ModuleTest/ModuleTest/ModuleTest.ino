@@ -5,7 +5,7 @@
 #include "PinAssignment.h"
 #include <L298N_omuni.h>
 #include <BlinkLED_binary.h>
-#include <USS\USS.h>
+#include <USS.h>
 #include <SD.h>
 #include <SPI.h>
 #include <Audio.h>
@@ -37,7 +37,7 @@ void setup() {
 	Serial.print("Initializing SD card...");
 	if (!SD.begin(4)) {
 		Serial.println(" failed!");
-		while (true);
+		//while (true);
 	}
 	Serial.println(" done.");
 	menu();

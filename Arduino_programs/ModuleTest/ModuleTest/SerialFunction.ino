@@ -1,4 +1,4 @@
-﻿void menu() {
+void menu() {
 	Serial.println(F("Module Circuit Test Program"));
 	Serial.println(F("COMMANDS:"));
 	Serial.println(F("[m] Motor"));
