@@ -1,5 +1,4 @@
 #define SERIAL_SPEED      9600
-#define PING_PIN 7
 
 const int output_pins_one[7] = {53, 50, 49, 46 , 45, 42, 41};
 const int output_pins_ten[7] = {35, 32, 31, 28, 27, 24, 23};
@@ -18,7 +17,6 @@ const int svn_segment_array[10][7] = {    // 7seg表示用配列
 };
 
 int i;
-long microsecondsToCentimeters(long microseconds);
 
 void setup() {
   Serial.begin(SERIAL_SPEED);
