@@ -27,6 +27,9 @@ typedef struct {
  *  http://www.atmel.com/Images/Atmel-11057-32-bit-Cortex-M3-Microcontroller-SAM3X-SAM3A_Datasheet.pdf
  */
 
+/* 各種定数値宣言 */
+#define BAUDRATE 115200   // CPUとのシリアル通信のボーレート
+
 /* パラメータ */
 #define T_CTRL 10 // 動作周期 [ms]
 

@@ -4,11 +4,11 @@ void setup() {
   io_open();
   encoder_open();
   motor_open();
-  raspi_open();
+  cpu_open();
 }
 
 void loop() {
-  slave();
+  mirsak_main();
 
   //test_encoder();
   //test_distance();
