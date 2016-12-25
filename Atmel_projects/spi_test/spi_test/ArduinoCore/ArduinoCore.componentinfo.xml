@@ -22,11 +22,13 @@
 					<CVendor>Atmel</CVendor>
 					<CVersion>1.0.0</CVersion>
 					<DefaultRepoPath>C:/Program Files (x86)\Atmel\Studio\7.0\Packs</DefaultRepoPath>
-					<DependentComponents />
+					<DependentComponents>
+						<d4p1:anyType z:Ref="i1" />
+					</DependentComponents>
 					<Description></Description>
 					<Files>
 						<d4p1:anyType i:type="FileInfo">
-							<AbsolutePath>C:/Program Files (x86)\Atmel\Studio\7.0\Packs\atmel\SAM3X_DFP\1.0.41\include</AbsolutePath>
+							<AbsolutePath>C:/Program Files (x86)\Atmel\Studio\7.0\Packs\atmel\SAM3X_DFP\1.0.35\include</AbsolutePath>
 							<Attribute></Attribute>
 							<Category>include</Category>
 							<Condition>C</Condition>
@@ -37,18 +39,18 @@
 							<SourcePath></SourcePath>
 						</d4p1:anyType>
 						<d4p1:anyType i:type="FileInfo">
-							<AbsolutePath>C:/Program Files (x86)\Atmel\Studio\7.0\Packs\atmel\SAM3X_DFP\1.0.41\include\sam.h</AbsolutePath>
+							<AbsolutePath>C:/Program Files (x86)\Atmel\Studio\7.0\Packs\atmel\SAM3X_DFP\1.0.35\include\sam.h</AbsolutePath>
 							<Attribute></Attribute>
 							<Category>header</Category>
 							<Condition>C</Condition>
-							<FileContentHash>BbLu44u2p9gn+8qU4vTOYA==</FileContentHash>
+							<FileContentHash>HqQ2CQv3Iavb3Xan7YK+Gw==</FileContentHash>
 							<FileVersion></FileVersion>
 							<Name>include/sam.h</Name>
 							<SelectString></SelectString>
 							<SourcePath></SourcePath>
 						</d4p1:anyType>
 						<d4p1:anyType i:type="FileInfo">
-							<AbsolutePath>C:/Program Files (x86)\Atmel\Studio\7.0\Packs\atmel\SAM3X_DFP\1.0.41\templates\library.c</AbsolutePath>
+							<AbsolutePath>C:/Program Files (x86)\Atmel\Studio\7.0\Packs\atmel\SAM3X_DFP\1.0.35\templates\library.c</AbsolutePath>
 							<Attribute>template</Attribute>
 							<Category>source</Category>
 							<Condition>C Lib</Condition>
@@ -59,11 +61,11 @@
 							<SourcePath></SourcePath>
 						</d4p1:anyType>
 						<d4p1:anyType i:type="FileInfo">
-							<AbsolutePath>C:/Program Files (x86)\Atmel\Studio\7.0\Packs\atmel\SAM3X_DFP\1.0.41\templates\library.cpp</AbsolutePath>
+							<AbsolutePath>C:/Program Files (x86)\Atmel\Studio\7.0\Packs\atmel\SAM3X_DFP\1.0.35\templates\library.cpp</AbsolutePath>
 							<Attribute>template</Attribute>
 							<Category>source</Category>
 							<Condition>C Lib</Condition>
-							<FileContentHash>85GunQXnKcWaU+tBnCgCEg==</FileContentHash>
+							<FileContentHash>A6CtkScmRPo5iQcWfSbq4Q==</FileContentHash>
 							<FileVersion></FileVersion>
 							<Name>templates/library.cpp</Name>
 							<SelectString>Main file (.cpp)</SelectString>
@@ -71,8 +73,8 @@
 						</d4p1:anyType>
 					</Files>
 					<PackName>SAM3X_DFP</PackName>
-					<PackPath>C:/Program Files (x86)/Atmel/Studio/7.0/Packs/atmel/SAM3X_DFP/1.0.41/Atmel.SAM3X_DFP.pdsc</PackPath>
-					<PackVersion>1.0.41</PackVersion>
+					<PackPath>C:/Program Files (x86)/Atmel/Studio/7.0/Packs/atmel/SAM3X_DFP/1.0.35/Atmel.SAM3X_DFP.pdsc</PackPath>
+					<PackVersion>1.0.35</PackVersion>
 					<PresentInProject>true</PresentInProject>
 					<ReferenceConditionId>ATSAM3X8E</ReferenceConditionId>
 					<RteComponents>
