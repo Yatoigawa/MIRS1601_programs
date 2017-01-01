@@ -20,7 +20,10 @@ void setup(void);
 void setup(void){
 	// DDRB = (1 << DDB3) | (1 << DDB5);
 	// PB3(MOSI) and PB5(SCK) are output setting.
-	InitSpiMaster();
+	SPI_master_init();
+
+	// SS pin -> PB2
+	DDRB = _BV(PB2);
 
 	// 16MHz，115.2k[bps] -> See Datasheet
 	Usart_Init(1, 16);
@@ -34,21 +37,22 @@ void setup(void){
 
 
 int main(void) {
-	uint8_t i;
-	uint8_t readdata;
+	uint8_t i,readData, sendData[2];
 	setup();
 	while (1) {
-		// 先頭ビットチェックループ
-		while(1){
-			if(Usart_Available() > 1){
-				i = Usart_Read(&readdata);
-				if(readdata == 0xA4){	// 先頭ビットチェック
-					break;
-				}
+		if(Usart_Available() > 0) {
+			i = Usart_Read(&readData);
+			if (i != 0x00) {  // データがあれば
+				PORTB &= ~(_BV(PB2));							// SS -> low
+				SPI_master_transfer(0x06 |((readData - 0x80) >> 2));
+				sendData[0] = SPI_master_transfer((readData -0x80) << 6);
+				sendData[1] = SPI_master_transfer(0x00);
+				PORTB |=  (_BV(PB2));
+				Usart_Write(0xA4);			// 先頭バイト指定
+				Usart_Write(sendData[0]);
+				Usart_Write(sendData[1]);
 			}
 		}
-		i = Usart_Read(&readdata);
-
+		_delay_ms(5);
 	}
 }
-
