@@ -1,13 +1,13 @@
-ï»¿/*
+
+/*
 file   : L298N_omuni.h
 Create : 2016/12/02
 Author : R. Hirayama
 Board  : Arduino Due
-
 feture :
-2ã¤ã®L298Nã§4å€‹ã®ãƒ¢ãƒ¼ã‚¿ãƒ¼ã‚’åˆ¶å¾¡ã—ã¾ã™ã€‚
-ã‚ã‚‰ã‹ã˜ã‚å‰å¾Œå·¦å³ã€å·¦å³æ–œã‚å‰ãƒ»å¾Œã‚ã€å·¦å³æ—‹å›žãŒç°¡å˜ã«å‡ºæ¥ã‚‹æ§˜ã«ãªã£ã¦ã„ã¾ã™ã€‚
-setupMotorã€driveMotoré–¢æ•°ã‚’ç›´æŽ¥ä½¿ç”¨ã™ã‚‹ã“ã¨ã§ã€ãƒ¢ãƒ¼ã‚¿ãƒ¼ã‚’å¥½ããªã‚ˆã†ã«å‹•ã‹ã›ã¾ã™ã€‚
+2‚Â‚ÌL298N‚Å4ŒÂ‚Ìƒ‚[ƒ^[‚ð§Œä‚µ‚Ü‚·B
+‚ ‚ç‚©‚¶‚ß‘OŒã¶‰EA¶‰EŽÎ‚ß‘OEŒã‚ëA¶‰Eù‰ñ‚ªŠÈ’P‚Éo—ˆ‚é—l‚É‚È‚Á‚Ä‚¢‚Ü‚·B
+setupMotorAdriveMotorŠÖ”‚ð’¼ÚŽg—p‚·‚é‚±‚Æ‚ÅAƒ‚[ƒ^[‚ðD‚«‚È‚æ‚¤‚É“®‚©‚¹‚Ü‚·B
 */
 #ifndef _L298N_OMUNI_h
 #define _L298N_OMUNI_h
@@ -23,7 +23,7 @@ public:
 	static const int MOTOR_W = 0;
 
 	L298N_omuni(int A_ena, int A_in1, int A_in2, int A_in3, int A_in4, int A_enb,
-				int B_ena, int B_in1, int B_in2, int B_in3, int B_in4, int B_enb);
+		int B_ena, int B_in1, int B_in2, int B_in3, int B_in4, int B_enb);
 
 	void forward(int speed, int delay_time);
 	void backward(int speed, int delay_time);
@@ -62,5 +62,31 @@ private:
 	int _B_enb;
 };
 
-#endif
+static void L298N_omuni::setupMotors(int state1, int state2, int state3, int state4, int state5, int state6, int state7, int state8)
+{
+	L298N_omuni::setupMotor(this->MOTOR_N, state1, state2);
+	L298N_omuni::setupMotor(this->MOTOR_S, state3, state4);
+	L298N_omuni::setupMotor(this->MOTOR_E, state5, state6);
+	L298N_omuni::setupMotor(this->MOTOR_W, state7, state8);
+}
 
+static void L298N_omuni::setupMotor(int motorIndex, int state1, int state2)
+{
+	digitalWrite(motors[motorIndex].in1, state1);
+	digitalWrite(motors[motorIndex].in2, state2);
+}
+
+static void L298N_omuni::driveMotors(int speed)
+{
+	this->driveMotor(this->MOTOR_N, speed);
+	this->driveMotor(this->MOTOR_S, speed);
+	this->driveMotor(this->MOTOR_E, speed);
+	this->driveMotor(this->MOTOR_W, speed);
+}
+static void L298N_omuni::driveMotor(int motorIndex, int speed)
+{
+	analogWrite(motors[motorIndex].pwm, speed);
+}
+
+
+#endif

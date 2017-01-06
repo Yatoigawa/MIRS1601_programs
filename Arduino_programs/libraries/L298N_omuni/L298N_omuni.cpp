@@ -1,13 +1,12 @@
-ï»¿/*
+/*
 file   : L298N_omuni.cpp
 Create : 2016/12/02
 Author : R. Hirayama
 Board  : Arduino Due
-
 feture :
-2ã¤ã®L298Nã§4å€‹ã®ãƒ¢ãƒ¼ã‚¿ãƒ¼ã‚’åˆ¶å¾¡ã—ã¾ã™ã€‚
-ã‚ã‚‰ã‹ã˜ã‚å‰å¾Œå·¦å³ã€å·¦å³æ–œã‚å‰ãƒ»å¾Œã‚ã€å·¦å³æ—‹å›žãŒç°¡å˜ã«å‡ºæ¥ã‚‹æ§˜ã«ãªã£ã¦ã„ã¾ã™ã€‚
-setupMotorã€driveMotoré–¢æ•°ã‚’ç›´æŽ¥ä½¿ç”¨ã™ã‚‹ã“ã¨ã§ã€ãƒ¢ãƒ¼ã‚¿ãƒ¼ã‚’å¥½ããªã‚ˆã†ã«å‹•ã‹ã›ã¾ã™ã€‚
+2‚Â‚ÌL298N‚Å4ŒÂ‚Ìƒ‚[ƒ^[‚ð§Œä‚µ‚Ü‚·B
+‚ ‚ç‚©‚¶‚ß‘OŒã¶‰EA¶‰EŽÎ‚ß‘OEŒã‚ëA¶‰Eù‰ñ‚ªŠÈ’P‚Éo—ˆ‚é—l‚É‚È‚Á‚Ä‚¢‚Ü‚·B
+setupMotorAdriveMotorŠÖ”‚ð’¼ÚŽg—p‚·‚é‚±‚Æ‚ÅAƒ‚[ƒ^[‚ðD‚«‚È‚æ‚¤‚É“®‚©‚¹‚Ü‚·B
 */
 #include "Arduino.h"
 #include "L298N_omuni.h"
@@ -22,7 +21,7 @@ struct Motor
 Motor motors[4];
 
 L298N_omuni::L298N_omuni(int A_ena, int A_in1, int A_in2, int A_in3, int A_in4, int A_enb,
-						 int B_ena, int B_in1, int B_in2, int B_in3, int B_in4, int B_enb)
+	int B_ena, int B_in1, int B_in2, int B_in3, int B_in4, int B_enb)
 {
 	pinMode(A_ena, OUTPUT);
 	pinMode(A_in1, OUTPUT);
@@ -56,93 +55,96 @@ L298N_omuni::L298N_omuni(int A_ena, int A_in1, int A_in2, int A_in3, int A_in4, 
 }
 
 /*
-åŒ—ã€æ±ã‚’æ­£ã¨ã™ã‚‹
+–kA“Œ‚ð³‚Æ‚·‚é
 NSEW
 N_in1,N_in2,S_in1,S_in2,E_in1,E_in2,W_in1,W_in2
 */
 void L298N_omuni::forward(int speed, int delay_time)
 {
-	this->setupMotors(LOW, LOW, LOW, LOW, HIGH, LOW, HIGH, LOW);
+	this->setupMotors(B00001010);
 	this->driveMotors(speed);
 	delay(delay_time);
 }
 
 void L298N_omuni::backward(int speed, int delay_time)
 {
-	this->setupMotors(LOW, LOW, LOW, LOW, LOW, HIGH, LOW, HIGH);
+	this->setupMotors(B00000101);
 	this->driveMotors(speed);
 	delay(delay_time);
 }
 
 void L298N_omuni::right(int speed, int delay_time)
 {
-	this->setupMotors(LOW, HIGH, LOW, HIGH, LOW, LOW, LOW, LOW);
+	this->setupMotors(B01010000);
 	this->driveMotors(speed);
 	delay(delay_time);
 }
 
 void L298N_omuni::left(int speed, int delay_time)
 {
-	this->setupMotors(HIGH, LOW, HIGH, LOW, LOW, LOW, LOW, LOW);
+	this->setupMotors(B10100000);
 	this->driveMotors(speed);
 	delay(delay_time);
 }
 
 void L298N_omuni::rightForward(int speed, int delay_time)
 {
-	this->setupMotors(LOW, HIGH, LOW, HIGH, HIGH, LOW, HIGH, LOW);
+	this->setupMotors(B01011010);
 	this->driveMotors(speed);
 	delay(delay_time);
 }
 
 void L298N_omuni::leftForward(int speed, int delay_time)
 {
-	this->setupMotors(HIGH, LOW, HIGH, LOW, HIGH, LOW, HIGH, LOW);
+	this->setupMotors(B10101010);
 	this->driveMotors(speed);
 	delay(delay_time);
 }
 
 void L298N_omuni::rightBackward(int speed, int delay_time)
 {
-	this->setupMotors(LOW, HIGH, LOW, HIGH, LOW, HIGH, LOW, HIGH);
+	this->setupMotors(B01010101);
 	this->driveMotors(speed);
 	delay(delay_time);
 }
 
 void L298N_omuni::leftBackward(int speed, int delay_time)
 {
-	this->setupMotors(HIGH, LOW, HIGH, LOW, LOW, HIGH, LOW, HIGH);
+	this->setupMotors(B10100101);
 	this->driveMotors(speed);
 	delay(delay_time);
 }
 
 void L298N_omuni::turnRight(int speed, int delay_time)
 {
-	this->setupMotors(HIGH, LOW, LOW, HIGH, LOW, HIGH, HIGH, LOW);
+	this->setupMotors(B10010110);
 	this->driveMotors(speed);
 	delay(delay_time);
 }
 
 void L298N_omuni::turnLeft(int speed, int delay_time)
 {
-	this->setupMotors(LOW, HIGH, HIGH, LOW, HIGH, LOW, LOW, HIGH);
+	this->setupMotors(B01101001);
 	this->driveMotors(speed);
 	delay(delay_time);
 }
 
 void L298N_omuni::fullStop(int delay_time)
 {
-	this->setupMotors(LOW, LOW, LOW, LOW, LOW, LOW, LOW, LOW);
+	this->setupMotors(B00000000);
 	this->driveMotors(0);
 	delay(delay_time);
 }
 
-void L298N_omuni::setupMotors(int state1, int state2, int state3, int state4, int state5, int state6, int state7, int state8)
+
+//ˆø”‚É8ƒrƒbƒg‚Ì“ñi”‚ð“ü—Í@char‚ðƒ‚[ƒ^‚ÌHigh Low§Œä‚ÉŠ„‚è“–‚Ä‚½B
+//0,1ƒrƒbƒg–Ú‚ª–k@2,3ƒrƒbƒg–Ú‚ª“ìA4,5ƒrƒbƒg–Ú‚ª“ŒA6,7ƒrƒbƒg–Ú‚ª¼
+void L298N_omuni::setupMotors(unsigned char& state)
 {
-	L298N_omuni::setupMotor(this->MOTOR_N, state1, state2);
-	L298N_omuni::setupMotor(this->MOTOR_S, state3, state4);
-	L298N_omuni::setupMotor(this->MOTOR_E, state5, state6);
-	L298N_omuni::setupMotor(this->MOTOR_W, state7, state8);
+	L298N_omuni::setupMotor(this->MOTOR_N, state & B1, state & B10);
+	L298N_omuni::setupMotor(this->MOTOR_S, state & B100, state & B1000);
+	L298N_omuni::setupMotor(this->MOTOR_E, state & B10000, state & B1000000);
+	L298N_omuni::setupMotor(this->MOTOR_W, state & B1000000, state& B100000000);
 }
 
 void L298N_omuni::setupMotor(int motorIndex, int state1, int state2)
