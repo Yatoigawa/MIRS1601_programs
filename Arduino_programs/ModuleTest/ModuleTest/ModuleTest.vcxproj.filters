@@ -17,8 +17,8 @@
   <ItemGroup>
     <None Include="ModuleTest.ino" />
     <None Include="SerialFunction.ino" />
-    <None Include="TestPrograms.ino" />
     <None Include="PinAssignment.ino" />
+    <None Include="TestPrograms.ino" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="__vm\.ModuleTest.vsarduino.h">
