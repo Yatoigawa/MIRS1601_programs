@@ -43,7 +43,7 @@ int main(void) {
 		if(Usart_Available() > 0) {
 			i = Usart_Read(&readData);
 			if (i != 0x00) {  // ƒf[ƒ^‚ª‚ ‚ê‚Î
-				PORTB &= ~(_BV(PB2));							// SS -> low
+				PORTB &= ~(_BV(PB2));		// SS -> low
 				SPI_master_transfer(0x06 |((readData - 0x80) >> 2));
 				sendData[0] = SPI_master_transfer((readData -0x80) << 6);
 				sendData[1] = SPI_master_transfer(0x00);
