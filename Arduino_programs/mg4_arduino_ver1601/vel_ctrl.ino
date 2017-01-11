@@ -26,7 +26,7 @@ void vel_ctrl_execute() {
   const double Kd = 0.0;
 
   int pwm_n, pwm_e, pwm_s, pwm_w;
-  double dist_curr_n, dist_curr_e, err_curr_s, err_curr_w;
+  double dist_curr_n, err_curr_n, dist_curr_e, err_curr_e, dist_curr_s, err_curr_s, dist_curr_w, err_curr_w;
 
   // 速度 [cm/s] = 距離の差分 [cm] / (制御周期 [ms] / 1000)
   distance_get(&dist_curr_n, &dist_curr_e, &dist_curr_s, &dist_curr_w);

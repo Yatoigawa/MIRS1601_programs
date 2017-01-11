@@ -1,8 +1,10 @@
 /* 変数型の定義 */
 typedef enum {
-  STP = 0,
-  STR,
+  STOP = 0,
+  STR_FB,
+  STR_LR,
   ROT
+  
 } run_state_t;
 
 typedef struct {
@@ -18,17 +20,32 @@ typedef struct {
 } command_data_t;
 
 /* ピン配置 */
+//ENCODER
+#define ENC_N1 44
+#define ENC_N2 45
+#define ENC_E1 46
+#define ENC_E2 47
+#define ENC_S1 48
+#define ENC_S2 49
+#define ENC_W1 50
+#define ENC_W2 51
+//MOTOR
+#define MTR_1ENA 4 //PWM N
+#define MTR_1ENB 5 //    E
+#define MTR_2ENA 6 //    S
+#define MTR_2ENB 7 //    W
+#define MTR_N1 33  //Digital
+#define MTR_N2 34
+#define MTR_E1 35
+#define MTR_E2 36
+#define MTR_S1 37
+#define MTR_S2 38
+#define MTR_W1 39
+#define MTR_W2 40
 
-/* 
- *  エレキ詳細設計書
- *  http://www2.denshi.numazu-ct.ac.jp/mirsdoc2/mirs1601/elec/num0001a/index.html 
- *  
- *  Atmel SAM3X / SAM3A Series datasheet
- *  http://www.atmel.com/Images/Atmel-11057-32-bit-Cortex-M3-Microcontroller-SAM3X-SAM3A_Datasheet.pdf
- */
-
-/* 各種定数値宣言 */
-#define BAUDRATE 115200   // CPUとのシリアル通信のボーレート
+#define PIN_SW      10
+#define PIN_LED     13
+#define PIN_BATT    19
 
 /* パラメータ */
 #define T_CTRL 10 // 動作周期 [ms]
@@ -37,6 +54,7 @@ typedef struct {
 #define D_TIRE    25.0    // タイヤ間隔 [cm]
 #define ENC_RANGE (100*2) // エンコーダ分解能 (A相立上り/立下りを利用するため2倍)
 #define T_E_RATIO 16.0    // タイヤに対するエンコーダの回転比
-#define L_R_RATIO  1.0    // 左タイヤに対する右タイヤの回転比
+#define E_W_RATIO  1.0    // 東タイヤに対する西タイヤの回転比
+#define N_S_RATIO  1.0    // 北タイヤに対する南タイヤの回転比
 
 #define V_RATIO 0.25 // バッテリ入力の分圧比
