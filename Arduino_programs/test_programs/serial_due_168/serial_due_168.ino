@@ -21,17 +21,21 @@ void setup() {
 
 void loop() {
   Serial2.write(i + 0x80);
+  Serial.print("count bef: ");
+  Serial.print(i);
+  delay(50);
   if (data.val > 0) {
-    Serial.print("count: ");
+    Serial.print(" count aft: ");
     Serial.print(i);
     Serial.print(" data: ");
-    Serial.println(data.val, HEX);
+    Serial.print(data.val, DEC);
   }
-  i++;
-  if (i > 7) {
-    i = 0;
-  }
-  delay(500);
+  Serial.println("");
+//  i++;
+//  if (i > 7) {
+//    i = 0;
+//  }
+  delay(200);
 }
 
 void serial_task() {
@@ -41,7 +45,7 @@ void serial_task() {
       data.lsb =  Serial2.read();
     }
   }
-  delay(100);
+  delay(10);
   yield();
 }
 
