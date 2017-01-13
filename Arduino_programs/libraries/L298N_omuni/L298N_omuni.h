@@ -52,7 +52,7 @@ private:
 		int pwm;
 	};
 
-	L298N_omuni::Motor _motors[4];
+	const L298N_omuni::Motor _motors[4];
 };
 
 #endif
