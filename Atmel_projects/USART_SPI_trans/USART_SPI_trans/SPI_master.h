@@ -44,7 +44,6 @@ uint8_t SPI_master_transfer(uint8_t tData) {
 	//Start transmission
 	SPDR = tData;
 	// Wait for transmission complete
-	asm volatile("nop");
 	while(!(SPSR & (1<<SPIF)));
 	//Receive 1 byte data
 	return SPDR;
