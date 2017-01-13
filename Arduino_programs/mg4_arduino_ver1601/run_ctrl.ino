@@ -82,9 +82,61 @@ void run_ctrl_execute() {
 			vel_ref = sign * speed_ref * ratio;
 
 			// 左右のタイヤの距離差の補正
-			vel_mod = (d_e - d_w) * Ks;
+			vel_mod = (d_n - d_s) * Ks;
 
 			vel_ctrl_set((vel_ref - vel_mod), 0.0, (vel_ref + vel_mod), 0.0);
+		}
+
+		break;
+
+	case STR_FR_BL:
+		//機体の右前、左後（北東と南西）方向に直進するモード　北東を正とする　動くモーターはNとEが正転 SとWが逆転
+		dist_curr = (sqrt(pow(d_n,2.0) + pow(d_e,2.0)) + sqrt(pow(d_s,2.0) + pow(d_w,2.0))) / 2.0;
+		speed_curr = (sqrt(pow(v_n,2.0) + pow(v_e,2.0)) + sqrt(pow(v_s,2.0) + pow(v_w,2.0))) / 2.0 * sign;
+
+		// 減速率
+		ratio = sign * (dist_ref - dist_curr) / dist_vel_down;
+		if (ratio < 0.0) ratio = 0.0;
+		if (ratio > 1.0) ratio = 1.0;
+
+		if (speed_ref == 0.0 || dist_ref == 0.0 || ratio == 0.0) {
+			run_state = STOP;
+			vel_ctrl_set(0.0, 0.0, 0.0, 0.0);
+		}
+		else {
+			// 減速の実行
+			vel_ref = sign * speed_ref * ratio;
+
+			// 左右のタイヤの距離差の補正
+			vel_mod = (sqrt(pow(d_n,2.0) + pow(d_e,2.0)) - sqrt(pow(d_s,2.0) + pow(d_w,2.0))) * Ks;
+
+			vel_ctrl_set((vel_ref - vel_mod), (vel_ref - vel_mod), -(vel_ref + vel_mod), -(vel_ref - vel_mod));
+		}
+
+		break;
+
+	case STR_FL_BR:
+		//機体の左前、右後（北西と南東）方向に直進するモード　北東を正とする　動くモーターはNとEが正転 SとWが逆転
+		dist_curr = (d_n + d_w - d_s - d_e) / 2.0;
+		speed_curr = (v_n + v_w - v_s - v_e) / 2.0 * sign;
+
+		// 減速率
+		ratio = sign * (dist_ref - dist_curr) / dist_vel_down;
+		if (ratio < 0.0) ratio = 0.0;
+		if (ratio > 1.0) ratio = 1.0;
+
+		if (speed_ref == 0.0 || dist_ref == 0.0 || ratio == 0.0) {
+			run_state = STOP;
+			vel_ctrl_set(0.0, 0.0, 0.0, 0.0);
+		}
+		else {
+			// 減速の実行
+			vel_ref = sign * speed_ref * ratio;
+
+			// 左右のタイヤの距離差の補正
+			vel_mod = (sqrt(pow(d_n,2.0) + pow(d_w,2.0)) - sqrt(pow(d_s,2.0) + pow(d_e,2.0))) * Ks;
+
+			vel_ctrl_set((vel_ref - vel_mod), -(vel_ref - vel_mod), -(vel_ref + vel_mod), (vel_ref - vel_mod));
 		}
 
 		break;
