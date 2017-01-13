@@ -1,5 +1,5 @@
 void cpu_open(void){
-  Serial.begin(BAUDRATE);
+  Serial.begin(115200);
 
   // バッファクリア
   while (Serial.available() > 0) {
@@ -9,6 +9,8 @@ void cpu_open(void){
 
 int cpu_read(){
   int i;
-  
+  while(Serial.available() > 0){
+    
+  }
 }
 
