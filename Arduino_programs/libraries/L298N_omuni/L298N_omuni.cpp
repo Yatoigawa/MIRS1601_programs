@@ -11,16 +11,12 @@ setupMotor、driveMotor関数を直接使用することで、モーターを好
 #include "Arduino.h"
 #include "L298N_omuni.h"
 
-struct Motor {
-	int in1;
-	int in2;
-	int pwm;
-};
-
-Motor motors[4];
-
 L298N_omuni::L298N_omuni(int A_ena, int A_in1, int A_in2, int A_in3, int A_in4, int A_enb,
 						 int B_ena, int B_in1, int B_in2, int B_in3, int B_in4, int B_enb)
+	: _motors{	{ A_in1, A_in2, A_ena },
+				{ A_in3, A_in4, A_enb },
+				{ B_in1, B_in2, B_ena },
+				{ B_in3, B_in4, B_enb } }
 {
 	pinMode(A_ena, OUTPUT);
 	pinMode(A_in1, OUTPUT);
@@ -35,22 +31,6 @@ L298N_omuni::L298N_omuni(int A_ena, int A_in1, int A_in2, int A_in3, int A_in4, 
 	pinMode(B_in3, OUTPUT);
 	pinMode(B_in4, OUTPUT);
 	pinMode(B_enb, OUTPUT);
-
-	motors[0].in1 = A_in1;
-	motors[0].in2 = A_in2;
-	motors[0].pwm = A_ena;
-
-	motors[1].in1 = A_in3;
-	motors[1].in2 = A_in4;
-	motors[1].pwm = A_enb;
-
-	motors[2].in1 = B_in1;
-	motors[2].in2 = B_in2;
-	motors[2].pwm = B_ena;
-
-	motors[3].in1 = B_in3;
-	motors[3].in2 = B_in4;
-	motors[3].pwm = B_enb;
 }
 
 /*
@@ -147,8 +127,8 @@ void L298N_omuni::setupMotors(byte state)
 
 void L298N_omuni::setupMotor(int motorIndex, int state1, int state2)
 {
-	digitalWrite(motors[motorIndex].in1, state1);
-	digitalWrite(motors[motorIndex].in2, state2);
+	digitalWrite(_motors[motorIndex].in1, state1);
+	digitalWrite(_motors[motorIndex].in2, state2);
 }
 
 void L298N_omuni::driveMotors(int speed)
@@ -160,5 +140,5 @@ void L298N_omuni::driveMotors(int speed)
 }
 void L298N_omuni::driveMotor(int motorIndex, int speed)
 {
-	analogWrite(motors[motorIndex].pwm, speed);
+	analogWrite(_motors[motorIndex].pwm, speed);
 }

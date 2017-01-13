@@ -14,8 +14,7 @@ setupMotor、driveMotor関数を直接使用することで、モーターを好
 
 #include "Arduino.h"
 
-class L298N_omuni
-{
+class L298N_omuni {
 public:
 	static const int MOTOR_N = 0;
 	static const int MOTOR_S = 1;
@@ -47,19 +46,13 @@ public:
 	void setupMotor(int motor_index, int state1, int state2);
 
 private:
-	struct Motor;
-	int _A_ena;
-	int _A_in1;
-	int _A_in2;
-	int _A_in3;
-	int _A_in4;
-	int _A_enb;
-	int _B_ena;
-	int _B_in1;
-	int _B_in2;
-	int _B_in3;
-	int _B_in4;
-	int _B_enb;
+	struct Motor {
+		int in1;
+		int in2;
+		int pwm;
+	};
+
+	L298N_omuni::Motor _motors[4];
 };
 
 #endif
