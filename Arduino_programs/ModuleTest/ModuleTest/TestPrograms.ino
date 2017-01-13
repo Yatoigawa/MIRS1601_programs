@@ -94,27 +94,27 @@ class Motor : public AbstructProgram
           break;
         case '9':
           Serial.println(F("rightForward"));
-          omuni.rightForward(speed, timeDelay);
+          omuni.rightForward(this->speed, timeDelay);
           break;
         case '3':
           Serial.println(F("rightBackward"));
-          omuni.rightBackward(speed, timeDelay);
+          omuni.rightBackward(this->speed, timeDelay);
           break;
         case '7':
           Serial.println(F("leftForward"));
-          omuni.leftForward(speed, timeDelay);
+          omuni.leftForward(this->speed, timeDelay);
           break;
         case '1':
           Serial.println(F("leftBackward"));
-          omuni.leftBackward(speed, timeDelay);
+          omuni.leftBackward(this->speed, timeDelay);
           break;
         case '*':
           Serial.println(F("turnRight"));
-          omuni.turnRight(speed, timeDelay);
+          omuni.turnRight(this->speed, timeDelay);
           break;
         case '/':
           Serial.println(F("turnLeft"));
-          omuni.turnLeft(speed, timeDelay);
+          omuni.turnLeft(this->speed, timeDelay);
           break;
         case '5':
           Serial.println(F("full stop"));

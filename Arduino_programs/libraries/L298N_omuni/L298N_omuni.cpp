@@ -4,15 +4,14 @@ Create : 2016/12/02
 Author : R. Hirayama
 Board  : Arduino Due
 feture :
-2‚Â‚ÌL298N‚Å4ŒÂ‚Ìƒ‚[ƒ^[‚ð§Œä‚µ‚Ü‚·B
-‚ ‚ç‚©‚¶‚ß‘OŒã¶‰EA¶‰EŽÎ‚ß‘OEŒã‚ëA¶‰Eù‰ñ‚ªŠÈ’P‚Éo—ˆ‚é—l‚É‚È‚Á‚Ä‚¢‚Ü‚·B
-setupMotorAdriveMotorŠÖ”‚ð’¼ÚŽg—p‚·‚é‚±‚Æ‚ÅAƒ‚[ƒ^[‚ðD‚«‚È‚æ‚¤‚É“®‚©‚¹‚Ü‚·B
+2ã¤ã®L298Nã§4å€‹ã®ãƒ¢ãƒ¼ã‚¿ãƒ¼ã‚’åˆ¶å¾¡ã—ã¾ã™ã€‚
+ã‚ã‚‰ã‹ã˜ã‚å‰å¾Œå·¦å³ã€å·¦å³æ–œã‚å‰ãƒ»å¾Œã‚ã€å·¦å³æ—‹å›žãŒç°¡å˜ã«å‡ºæ¥ã‚‹æ§˜ã«ãªã£ã¦ã„ã¾ã™ã€‚
+setupMotorã€driveMotoré–¢æ•°ã‚’ç›´æŽ¥ä½¿ç”¨ã™ã‚‹ã“ã¨ã§ã€ãƒ¢ãƒ¼ã‚¿ãƒ¼ã‚’å¥½ããªã‚ˆã†ã«å‹•ã‹ã›ã¾ã™ã€‚
 */
 #include "Arduino.h"
 #include "L298N_omuni.h"
 
-struct Motor
-{
+struct Motor {
 	int in1;
 	int in2;
 	int pwm;
@@ -21,7 +20,7 @@ struct Motor
 Motor motors[4];
 
 L298N_omuni::L298N_omuni(int A_ena, int A_in1, int A_in2, int A_in3, int A_in4, int A_enb,
-	int B_ena, int B_in1, int B_in2, int B_in3, int B_in4, int B_enb)
+						 int B_ena, int B_in1, int B_in2, int B_in3, int B_in4, int B_enb)
 {
 	pinMode(A_ena, OUTPUT);
 	pinMode(A_in1, OUTPUT);
@@ -55,7 +54,7 @@ L298N_omuni::L298N_omuni(int A_ena, int A_in1, int A_in2, int A_in3, int A_in4, 
 }
 
 /*
-–kA“Œ‚ð³‚Æ‚·‚é
+åŒ—ã€æ±ã‚’æ­£ã¨ã™ã‚‹
 NSEW
 N_in1,N_in2,S_in1,S_in2,E_in1,E_in2,W_in1,W_in2
 */
@@ -136,15 +135,14 @@ void L298N_omuni::fullStop(int delay_time)
 	delay(delay_time);
 }
 
-
-//ˆø”‚É8ƒrƒbƒg‚Ì“ñi”‚ð“ü—Í@char‚ðƒ‚[ƒ^‚ÌHigh Low§Œä‚ÉŠ„‚è“–‚Ä‚½B
-//0,1ƒrƒbƒg–Ú‚ª–k@2,3ƒrƒbƒg–Ú‚ª“ìA4,5ƒrƒbƒg–Ú‚ª“ŒA6,7ƒrƒbƒg–Ú‚ª¼
-void L298N_omuni::setupMotors(unsigned char& state)
+//å¼•æ•°ã«8ãƒ“ãƒƒãƒˆã®äºŒé€²æ•°ã‚’å…¥åŠ›ã€€charã‚’ãƒ¢ãƒ¼ã‚¿ã®High Lowåˆ¶å¾¡ã«å‰²ã‚Šå½“ã¦ãŸã€‚
+//0,1ãƒ“ãƒƒãƒˆç›®ãŒåŒ—ã€€2,3ãƒ“ãƒƒãƒˆç›®ãŒå—ã€4,5ãƒ“ãƒƒãƒˆç›®ãŒæ±ã€6,7ãƒ“ãƒƒãƒˆç›®ãŒè¥¿
+void L298N_omuni::setupMotors(byte state)
 {
-	L298N_omuni::setupMotor(this->MOTOR_N, state & B1, state & B10);
-	L298N_omuni::setupMotor(this->MOTOR_S, state & B100, state & B1000);
-	L298N_omuni::setupMotor(this->MOTOR_E, state & B10000, state & B1000000);
-	L298N_omuni::setupMotor(this->MOTOR_W, state & B1000000, state& B100000000);
+	L298N_omuni::setupMotor(this->MOTOR_N, state & B00000001, state & B00000010);
+	L298N_omuni::setupMotor(this->MOTOR_S, state & B00000100, state & B00001000);
+	L298N_omuni::setupMotor(this->MOTOR_E, state & B00010000, state & B00100000);
+	L298N_omuni::setupMotor(this->MOTOR_W, state & B01000000, state & B10000000);
 }
 
 void L298N_omuni::setupMotor(int motorIndex, int state1, int state2)
