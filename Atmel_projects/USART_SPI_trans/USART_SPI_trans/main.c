@@ -23,8 +23,8 @@ void setup(void){
 	SPI_master_init();
 
 	// SS pin -> PB2
-	DDRB = _BV(PB2);
-
+	DDRB   = _BV(PB2);
+	PORTB |= _BV(PB2);
 	// 16MHz，115.2k[bps] -> See Datasheet
 	Usart_Init(1, 16);
 
@@ -37,7 +37,8 @@ void setup(void){
 
 
 int main(void) {
-	uint8_t i,readData, sendData[2];
+	uint8_t i,readData = 0;
+	uint8_t sendData[2] = {0, 0};
 	setup();
 	while (1) {
 		if(Usart_Available() > 0) {
@@ -45,7 +46,7 @@ int main(void) {
 			if (i != 0x00) {  // データがあれば
 				PORTB &= ~(_BV(PB2));		// SS -> low
 				SPI_master_transfer(0x06 |((readData - 0x80) >> 2));
-				sendData[0] = SPI_master_transfer((readData -0x80) << 6);
+				sendData[0] = SPI_master_transfer((readData - 0x80) << 6);
 				sendData[1] = SPI_master_transfer(0x00);
 				PORTB |=  (_BV(PB2));
 				Usart_Write(0xA4);			// 先頭バイト指定
