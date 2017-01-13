@@ -3,8 +3,9 @@ typedef enum {
   STOP = 0,
   STR_FB,
   STR_LR,
+  STR_FR_BL,
+  STR_FL_BR,
   ROT
-  
 } run_state_t;
 
 typedef struct {
@@ -18,6 +19,14 @@ typedef struct {
 typedef struct {
   signed short val[3];
 } command_data_t;
+
+typedef union {
+  uint16_t val;
+  struct {
+    uint8_t lsb;
+    uint8_t msb;
+  };
+} infrared_data_t;
 
 /* ピン配置 */
 //ENCODER
