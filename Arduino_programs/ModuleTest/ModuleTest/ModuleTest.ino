@@ -32,14 +32,14 @@ void setup() {
 	pinMode(13, OUTPUT);
 	//initPinAssiment(outputPins, OUTPUT);
 	//initPinAssiment(inputPins, INPUT);
+	
 	Serial.begin(9600);
+
 	//SDカード初期化
 	Serial.print("Initializing SD card...");
-	if (!SD.begin(4)) {
-		Serial.println(" failed!");
-		//while (true);
-	}
-	Serial.println(" done.");
+	String m = SD.begin(4) ? "done." : "failed! DO NOT RUN THE [WMV Player]";
+	Serial.println(m);
+	
 	menu();
 }
 

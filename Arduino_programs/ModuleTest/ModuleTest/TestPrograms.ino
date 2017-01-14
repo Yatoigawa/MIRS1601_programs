@@ -372,7 +372,7 @@ void selector(char command) {
       pTests[4]->Processor(command);
       break;
 
-    case 'M':
+    case 'w':
       pTests[5]->Processor(command);
       break;
 

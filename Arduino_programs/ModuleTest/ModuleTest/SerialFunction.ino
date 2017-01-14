@@ -6,5 +6,5 @@ void menu() {
 	Serial.println(F("[i] Infrared sensor"));
 	Serial.println(F("[t] Tape LED"));
 	Serial.println(F("[e] Encoder"));
-	Serial.println(F("[M] MP3 player"));
+	Serial.println(F("[w] WMV Player"));
 }
