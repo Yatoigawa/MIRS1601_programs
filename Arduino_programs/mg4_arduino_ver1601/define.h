@@ -1,3 +1,6 @@
+#include <Arduino.h>
+#include <stdlib.h>
+#include "USS.h"
 /* 変数型の定義 */
 typedef enum {
   STOP = 0,
@@ -19,14 +22,6 @@ typedef struct {
 typedef struct {
   signed short val[3];
 } command_data_t;
-
-typedef union {
-  uint16_t val;
-  struct {
-    uint8_t lsb;
-    uint8_t msb;
-  };
-} infrared_data_t;
 
 /* ピン配置 */
 //ENCODER
