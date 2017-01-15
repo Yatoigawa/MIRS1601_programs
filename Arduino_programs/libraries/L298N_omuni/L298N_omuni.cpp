@@ -54,42 +54,42 @@ void L298N_omuni::backward(int speed, int delay_time)
 
 void L298N_omuni::right(int speed, int delay_time)
 {
-	this->setupMotors(B01100000);
+	this->setupMotors(B10010000);
 	this->driveMotors(speed);
 	delay(delay_time);
 }
 
 void L298N_omuni::left(int speed, int delay_time)
 {
-	this->setupMotors(B10010000);
+	this->setupMotors(B01100000);
 	this->driveMotors(speed);
 	delay(delay_time);
 }
 
 void L298N_omuni::rightForward(int speed, int delay_time)
 {
-	this->setupMotors(B01101001);
+	this->setupMotors(B10011001);
 	this->driveMotors(speed);
 	delay(delay_time);
 }
 
 void L298N_omuni::leftForward(int speed, int delay_time)
 {
-	this->setupMotors(B10011001);
+	this->setupMotors(B01101001);
 	this->driveMotors(speed);
 	delay(delay_time);
 }
 
 void L298N_omuni::rightBackward(int speed, int delay_time)
 {
-	this->setupMotors(B01100110);
+	this->setupMotors(B10010110);
 	this->driveMotors(speed);
 	delay(delay_time);
 }
 
 void L298N_omuni::leftBackward(int speed, int delay_time)
 {
-	this->setupMotors(B10010110);
+	this->setupMotors(B01100110);
 	this->driveMotors(speed);
 	delay(delay_time);
 }
