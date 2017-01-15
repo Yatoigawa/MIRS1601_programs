@@ -1,3 +1,6 @@
+#include <Arduino.h>
+#include <stdlib.h>
+#include "USS.h"
 /* 変数型の定義 */
 typedef enum {
   STOP = 0,
