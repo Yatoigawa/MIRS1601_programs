@@ -16,11 +16,6 @@ setupMotor、driveMotor関数を直接使用することで、モーターを好
 
 class L298N_omuni {
 public:
-	static const int MOTOR_N = 0;
-	static const int MOTOR_S = 1;
-	static const int MOTOR_E = 2;
-	static const int MOTOR_W = 3;
-
 	L298N_omuni(int A_ena, int A_in1, int A_in2, int A_in3, int A_in4, int A_enb,
 				int B_ena, int B_in1, int B_in2, int B_in3, int B_in4, int B_enb);
 
@@ -46,6 +41,20 @@ public:
 	void setupMotor(int motor_index, int state1, int state2);
 
 private:
+	static const int MOTOR_N = 0;
+	static const int MOTOR_S = 1;
+	static const int MOTOR_E = 2;
+	static const int MOTOR_W = 3;
+	
+	static const byte Bforward = B00001001;
+	static const byte Bbackward = B00000110;
+	static const byte Bright = B01100000;
+	static const byte Bleft = B10010000;
+	static const byte BrightForward = B01101001;
+	static const byte BleftForward = B10011001;
+	static const byte BrightBackward = B01100110;
+	static const byte BleftBackward = B10010110;
+	
 	struct Motor {
 		int in1;
 		int in2;
