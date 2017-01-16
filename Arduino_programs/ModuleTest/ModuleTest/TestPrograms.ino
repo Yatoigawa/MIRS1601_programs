@@ -227,26 +227,77 @@ public:
 
 private:
 	int numList = 0;
+	String music_command;
 
 	void testMenu() {
 		Serial.println(F("[s] Stop playing"));
 		Serial.println(F("Caution : You can NOT use the [e] command during music playback"));
 	}
-	void process() {
-		initPlayer();
-		int count = 0;
 
-START:
+	void process() {
+		initPlayerAndMusicSelect();
+		
+		File myFile = SD.open(this->music_command);
+		//そもそも曲を再生するのか判断
+		if (this->music_command == "e") {
+			this->key_command == *this->music_command.c_str();
+			if (myFile) myFile.close();	//万が一"e"というファイルが開けてしまった場合
+		}
+		//例外処理
+		else if (!myFile) {
+			Serial.println(F("error opening"));
+		}
+		else {
+			playing(myFile);
+			
+			//再生終了時の処理
+			myFile.close();
+			Serial.println(F("End of file. Thank you for listening!"));
+			Serial.println(F("Do you want to end the test?"));
+			Serial.println(F("To exit, enter the [e] command"));
+			Serial.println(F("Please press any key"));
+			while (Serial.available() == 0);
+			if (Serial.read() == 'e') this->key_command = 'e';
+		}
+		Audio.end();
+		delay(500);
+	}
+
+	//music_commandが書き換わる
+	void initPlayerAndMusicSelect() {
+		//オーディオ初期化
+		//サンプルレート88200bps, バッファ100ms
+		Audio.begin(88200, 100);
+
+		//ミュージックリスト表示
+		File root = SD.open("/");
+		printDirectory(root);
+		Serial.print(F("Number of the music : "));
+		Serial.println(this->numList);
+		root.close();
+
 		//選曲
 		Serial.print(F("Please input a music name : "));
 		while (Serial.available() == 0);
-		String musicName = Serial.readString();
-		Serial.println(musicName);
-		File myFile = SD.open(musicName);
-		if (!myFile) {
-			Serial.println(F("error opening"));
-			goto START;
+		this->music_command = Serial.readString();
+		Serial.println(this->music_command);
+	}
+
+	//ファイルを一覧表示
+	void printDirectory(File& root) {
+		this->numList = 0;
+		while (true) {
+			File entry = root.openNextFile();
+			if (!entry) break; // no more files
+			this->numList++;
+			Serial.println(entry.name());
+			entry.close();
 		}
+	}
+
+	//再生
+	void playing(File& myFile) {
+		int count = 0;
 
 		const int S = 1024; // Number of samples to read in block
 		short buffer[S];
@@ -272,53 +323,17 @@ START:
 
 			//曲再生中のコマンド
 			if (Serial.available() != 0) {
-				if (Serial.read() == 's') {
+				char temp_command = Serial.read();
+				if (temp_command == 's') {
 					Serial.println(F("Stop playing"));
 					break;
 				}
-				else if (Serial.read() == ' ') {
+				else if (temp_command == ' ') {
 					Serial.println(F("Pause"));
 					while (Serial.read() != ' ');
 					Serial.println(F("Playing"));
 				}
 			}
-		}
-		myFile.close();
-		Audio.end();
-		Serial.println(F("End of file. Thank you for listening!"));
-		Serial.println(F("Do you want to end the test?"));
-		Serial.println(F("To exit, enter the [e] command"));
-		Serial.println(F("Please press any key"));
-		while (Serial.available() == 0);
-		if (Serial.read() == 'e') {
-			this->key_command = 'e';
-		}
-		Serial.println(this->key_command);
-		delay(500);
-	}
-
-	void initPlayer() {
-		//オーディオ初期化
-		//サンプルレート88200bps, バッファ100ms
-		Audio.begin(88200, 100);
-
-		//ミュージックリスト表示
-		File root = SD.open("/");
-		printDirectory(root);
-		Serial.print(F("Number of the music : "));
-		Serial.println(this->numList);
-		root.close();
-	}
-
-	//ファイルを一覧表示
-	void printDirectory(File dir) {
-		this->numList = 0;
-		while (true) {
-			File entry = dir.openNextFile();
-			if (!entry) break; // no more files
-			this->numList++;
-			Serial.println(entry.name());
-			entry.close();
 		}
 	}
 };
@@ -359,4 +374,3 @@ void selector(char command) {
 			break;
 	}
 }
-
