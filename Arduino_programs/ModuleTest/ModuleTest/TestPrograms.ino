@@ -10,7 +10,7 @@
 
 class AbstructProgram {
 public:
-	char keyCommand = NULL;
+	char key_command = NULL;
 
 	//処理メソッド
 	void Processor(char command) {
@@ -29,10 +29,10 @@ public:
 			//process()は純粋仮想関数で、このクラスには実装されていない
 			this->process();
 
-			if (this->keyCommand == 'e') break;
-			this->keyCommand = Serial.read();
+			if (this->key_command == 'e') break;
+			this->key_command = Serial.read();
 		}
-		this->keyCommand = NULL;
+		this->key_command = NULL;
 		menu();
 	}
 
@@ -48,8 +48,9 @@ public:
 	~Motor() {};
 
 private:
-	int timeDelay = 500;
-	int speed = 150;
+	int timeDelay = 500;	//ms
+	int speed = 150;	//0~225
+	char key_command_old;
 
 	void testMenu() {
 		Serial.println(F("[8] forward"));
@@ -60,75 +61,29 @@ private:
 		Serial.println(F("[3] rightBackward"));
 		Serial.println(F("[7] leftForward"));
 		Serial.println(F("[1] leftBackward"));
-		Serial.println(F("[*] turnRight"));
-		Serial.println(F("[/] turnLeft"));
 		Serial.println(F("[5] full stop"));
 		Serial.println(F("[+] speed up"));
 		Serial.println(F("[-] speed down"));
 		Serial.println(F("Caution : Please use the numeric keypad"));
 	}
+
 	void process() {
-		switch (keyCommand) {
-			//テンキーでほとんどを操作
-			case '8':
-				Serial.println(F("forward"));
-				omuni.forward(this->speed, timeDelay);
-				break;
-			case '2':
-				Serial.println(F("backward"));
-				omuni.backward(this->speed, timeDelay);
-				break;
-			case '6':
-				Serial.println(F("right"));
-				omuni.right(this->speed, timeDelay);
-				break;
-			case '4':
-				Serial.println(F("left"));
-				omuni.left(this->speed, timeDelay);
-				break;
-			case '9':
-				Serial.println(F("rightForward"));
-				omuni.rightForward(this->speed, timeDelay);
-				break;
-			case '3':
-				Serial.println(F("rightBackward"));
-				omuni.rightBackward(this->speed, timeDelay);
-				break;
-			case '7':
-				Serial.println(F("leftForward"));
-				omuni.leftForward(this->speed, timeDelay);
-				break;
-			case '1':
-				Serial.println(F("leftBackward"));
-				omuni.leftBackward(this->speed, timeDelay);
-				break;
-			case '*':
-				Serial.println(F("turnRight"));
-				omuni.turnRight(this->speed, timeDelay);
-				break;
-			case '/':
-				Serial.println(F("turnLeft"));
-				omuni.turnLeft(this->speed, timeDelay);
-				break;
-			case '5':
-				Serial.println(F("full stop"));
-				omuni.fullStop(timeDelay);
-				break;
-			case '+':
+		branchOrder(this->key_command);
+		if (this->key_command == '+' || this->key_command == '-') {
+			if (this->key_command == '+') {
 				this->speed += 10;
-				this->isSafeSpeed();
 				Serial.print(F("speed up: "));
-				Serial.println(this->speed);
-				break;
-			case '-':
+			}
+			else if (this->key_command == '-') {
 				this->speed -= 10;
-				this->isSafeSpeed();
 				Serial.print(F("speed down: "));
-				Serial.println(this->speed);
-				break;
-			default:
-				flashLED(13, 100);
-				break;
+			}
+			this->isSafeSpeed();
+			Serial.println(this->speed);
+			branchOrder(this->key_command_old);
+		}
+		else {
+			flashLED(13, 100);
 		}
 	}
 
@@ -138,6 +93,60 @@ private:
 		}
 		if (this->speed < 0) {
 			this->speed = 0;
+		}
+	}
+
+	void branchOrder(char key_command) {
+		switch (key_command) {
+			//テンキーで操作
+			case '8':
+				Serial.println(F("forward"));
+				omuni.forward(this->speed, timeDelay);
+				this->key_command_old = key_command;
+				break;
+			case '2':
+				Serial.println(F("backward"));
+				omuni.backward(this->speed, timeDelay);
+				this->key_command_old = key_command;
+				break;
+			case '6':
+				Serial.println(F("right"));
+				omuni.right(this->speed, timeDelay);
+				this->key_command_old = key_command;
+				break;
+			case '4':
+				Serial.println(F("left"));
+				omuni.left(this->speed, timeDelay);
+				this->key_command_old = key_command;
+				break;
+			case '9':
+				Serial.println(F("rightForward"));
+				omuni.rightForward(this->speed, timeDelay);
+				this->key_command_old = key_command;
+				break;
+			case '3':
+				Serial.println(F("rightBackward"));
+				omuni.rightBackward(this->speed, timeDelay);
+				this->key_command_old = key_command;
+				break;
+			case '7':
+				Serial.println(F("leftForward"));
+				omuni.leftForward(this->speed, timeDelay);
+				this->key_command_old = key_command;
+				break;
+			case '1':
+				Serial.println(F("leftBackward"));
+				omuni.leftBackward(this->speed, timeDelay);
+				this->key_command_old = key_command;
+				break;
+			case '5':
+				Serial.println(F("full stop"));
+				omuni.fullStop(timeDelay);
+				this->key_command_old = key_command;
+				break;
+			default:
+				Serial.println(F("This command is invalid"));
+				break;
 		}
 	}
 };
@@ -266,7 +275,8 @@ START:
 				if (Serial.read() == 's') {
 					Serial.println(F("Stop playing"));
 					break;
-				} else if (Serial.read() == ' ') {
+				}
+				else if (Serial.read() == ' ') {
 					Serial.println(F("Pause"));
 					while (Serial.read() != ' ');
 					Serial.println(F("Playing"));
@@ -281,9 +291,9 @@ START:
 		Serial.println(F("Please press any key"));
 		while (Serial.available() == 0);
 		if (Serial.read() == 'e') {
-			this->keyCommand = 'e';
+			this->key_command = 'e';
 		}
-		Serial.println(this->keyCommand);
+		Serial.println(this->key_command);
 		delay(500);
 	}
 
