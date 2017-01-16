@@ -32,14 +32,14 @@ void setup() {
 	pinMode(13, OUTPUT);
 	//initPinAssiment(outputPins, OUTPUT);
 	//initPinAssiment(inputPins, INPUT);
-	
+
 	Serial.begin(9600);
 
 	//SDカード初期化
 	Serial.print("Initializing SD card...");
 	String m = SD.begin(4) ? "done." : "failed! DO NOT RUN THE [WMV Player]";
 	Serial.println(m);
-	
+
 	menu();
 }
 
@@ -52,10 +52,20 @@ void loop() {
 	flashLED(13, 100);
 }
 
+void menu() {
+	Serial.println(F("Module Circuit Test Program"));
+	Serial.println(F("COMMANDS:"));
+	Serial.println(F("[m] Motor"));
+	Serial.println(F("[u] Ultrasonic sensor"));
+	Serial.println(F("[i] Infrared sensor"));
+	Serial.println(F("[t] Tape LED"));
+	Serial.println(F("[e] Encoder"));
+	Serial.println(F("[w] WMV Player"));
+}
+
 inline void flashLED(int pin, int delayTime) {
 	byte s = ledState ? HIGH : LOW;
 	digitalWrite(pin, s);
 	ledState = !ledState;
 	delay(delayTime);
 }
-
