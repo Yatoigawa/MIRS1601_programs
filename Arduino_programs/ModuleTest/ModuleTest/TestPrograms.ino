@@ -204,17 +204,33 @@ private:
 	}
 };
 
-class Encoder : public AbstructProgram {
+class TestEnc : public AbstructProgram {
 public:
-	Encoder() {};
-	~Encoder() {};
+	TestEnc() {};
+	~TestEnc() {};
 
 private:
-	void testMenu() {
+	long old_position[4] = { -999 };
+	long new_position[4] = {};
 
-	}
+	void testMenu() {}
 	void process() {
-
+		for (int i = 0; sizeof(old_position) / sizeof(old_position[0]); i++) {
+			new_position[i] = encoder_array[i].read();
+			if (new_position[i] != old_position[0]) {
+				old_position[i] = new_position[i];
+			}
+		}
+		Serial.print("N: ");
+		Serial.print(new_position[0]);
+		Serial.print(" E: ");
+		Serial.print(new_position[1]);
+		Serial.print(" S: ");
+		Serial.print(new_position[2]);
+		Serial.print(" W: ");
+		Serial.print(new_position[3]);
+		Serial.println();
+		flashLED(13, 100);
 	}
 };
 
@@ -339,7 +355,7 @@ private:
 };
 
 //子クラスをインスタンス化
-AbstructProgram *pTests[6] = { new Motor, new Uss, new Ir, new Tape, new Encoder, new WAV };
+AbstructProgram *pTests[6] = { new Motor, new Uss, new Ir, new Tape, new TestEnc, new WAV };
 
 //テスト内容を選択
 void selector(char& command) {
@@ -368,7 +384,7 @@ void selector(char& command) {
 			pTests[5]->Processor(command);
 			break;
 
-		default: 
+		default:
 			break;
 	}
 }
