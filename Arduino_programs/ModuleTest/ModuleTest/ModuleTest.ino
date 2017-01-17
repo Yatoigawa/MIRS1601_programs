@@ -22,7 +22,6 @@ L298N_omuni omuni = L298N_omuni(MTR_1ENA, MTR_N1, MTR_N2, MTR_S1, MTR_S2, MTR_1E
 USS ussArray[4] = { USS(USS_N),USS(USS_S),USS(USS_E),USS(USS_W) };
 BlinkLED_binary tapeLED = BlinkLED_binary(TL_0, TL_1, TL_2);
 
-bool checkTestFinished = true;
 bool ledState = true;
 
 //プロトタイプ宣言
@@ -36,8 +35,8 @@ void setup() {
 	Serial.begin(9600);
 
 	//SDカード初期化
-	Serial.print("Initializing SD card...");
-	String m = SD.begin(4) ? "done." : "failed! DO NOT RUN THE [WMV Player]";
+	Serial.print(F("Initializing SD card..."));
+	String m = SD.begin(4) ? "done." : "failed!\n********************\nDO NOT RUN THE [WMV Player]\n********************";
 	Serial.println(m);
 
 	menu();
@@ -56,11 +55,12 @@ void menu() {
 	Serial.println(F("Module Circuit Test Program"));
 	Serial.println(F("COMMANDS:"));
 	Serial.println(F("[m] Motor"));
-	Serial.println(F("[u] Ultrasonic sensor"));
-	Serial.println(F("[i] Infrared sensor"));
-	Serial.println(F("[t] Tape LED"));
 	Serial.println(F("[e] Encoder"));
 	Serial.println(F("[w] WMV Player"));
+	Serial.println(F("[t] Tape LED"));
+	Serial.println(F("[i] Infrared sensor"));
+	Serial.println(F("[u] Ultrasonic sensor"));
+	Serial.flush();
 }
 
 inline void flashLED(int pin, int delayTime) {

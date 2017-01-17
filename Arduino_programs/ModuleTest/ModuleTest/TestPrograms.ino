@@ -10,10 +10,8 @@
 
 class AbstructProgram {
 public:
-	char key_command = NULL;
-
 	//処理メソッド
-	void Processor(char command) {
+	void Processor(char& command) {
 		//メニュー表示
 		Serial.print(F("Test : "));
 		Serial.println(command, HEX);
@@ -23,7 +21,6 @@ public:
 
 		Serial.println(F("Please press any key to start"));
 		while (Serial.available() == 0);
-		Serial.flush();
 
 		while (true) {
 			//process()は純粋仮想関数で、このクラスには実装されていない
@@ -37,6 +34,8 @@ public:
 	}
 
 protected:
+	char key_command = NULL;
+
 	//この関数をオーバーライドすることで、子クラス(各テストプログラム)によって処理を変えられる
 	virtual void testMenu() = 0;
 	virtual inline void process() = 0;
@@ -324,12 +323,12 @@ private:
 
 			//曲再生中のコマンド
 			if (Serial.available() != 0) {
-				char temp_command = Serial.read();
-				if (temp_command == 's') {
+				char c = Serial.read();
+				if (c == 's') {
 					Serial.println(F("Stop playing"));
 					break;
 				}
-				else if (temp_command == ' ') {
+				else if (c == ' ') {
 					Serial.println(F("Pause"));
 					while (Serial.read() != ' ');
 					Serial.println(F("Playing"));
@@ -340,11 +339,10 @@ private:
 };
 
 //子クラスをインスタンス化
-//これで新しいクラスができても変更が楽
 AbstructProgram *pTests[6] = { new Motor, new Uss, new Ir, new Tape, new Encoder, new WAV };
 
 //テスト内容を選択
-void selector(char command) {
+void selector(char& command) {
 	switch (command) {
 		case 'm':
 			pTests[0]->Processor(command);
@@ -370,8 +368,7 @@ void selector(char command) {
 			pTests[5]->Processor(command);
 			break;
 
-		default:
-			//なにも処理しない
+		default: 
 			break;
 	}
 }
