@@ -68,7 +68,9 @@ private:
 	}
 
 	void process() {
-		branchOrder(this->key_command);
+		if (this->key_command != NULL) {
+			branchOrder(this->key_command);
+		}
 		if (this->key_command == '+' || this->key_command == '-') {
 			if (this->key_command == '+') {
 				this->speed += 10;
@@ -82,9 +84,7 @@ private:
 			Serial.println(this->speed);
 			branchOrder(this->key_command_old);
 		}
-		else {
-			flashLED(13, 100);
-		}
+		flashLED(13, 100);
 	}
 
 	void isSafeSpeed() {
@@ -145,7 +145,6 @@ private:
 				this->key_command_old = key_command;
 				break;
 			default:
-				Serial.println(F("This command is invalid"));
 				break;
 		}
 	}
@@ -236,11 +235,13 @@ private:
 
 	void process() {
 		initPlayerAndMusicSelect();
-		
+
 		File myFile = SD.open(this->music_command);
-		//そもそも曲を再生するのか判断
+		//そもそも曲を再生するのか判断する
 		if (this->music_command == "e") {
-			this->key_command == *this->music_command.c_str();
+			Serial.println(F("To exit, enter the [e] command"));
+			while (Serial.available() == 0);
+			if (Serial.read() == 'e') this->key_command = 'e';
 			if (myFile) myFile.close();	//万が一"e"というファイルが開けてしまった場合
 		}
 		//例外処理
@@ -249,7 +250,7 @@ private:
 		}
 		else {
 			playing(myFile);
-			
+
 			//再生終了時の処理
 			myFile.close();
 			Serial.println(F("End of file. Thank you for listening!"));
