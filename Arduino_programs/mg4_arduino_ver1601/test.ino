@@ -16,11 +16,11 @@ void test_distance() {
 
   while (1) {
     distance_get(&dist_n, &dist_e, &dist_s, &dist_w);
-    sprintf(str, "dist_n = %s, dist_e = %s, dist_s, dist_w\n",
-            dtostrf(dist_n, 6, 1, str_n),
-            dtostrf(dist_e, 6, 1, str_e),
-            dtostrf(dist_s, 6, 1, str_s),
-            dtostrf(dist_w, 6, 1, str_w));
+    sprintf(str, "dist_n = %s, dist_e = %s, dist_s = %s, dist_w = %s\n",
+            sprintf(str_n, "%6, 1f", dist_n),
+            sprintf(str_e, "%6, 1f", dist_e),
+            sprintf(str_s, "%6, 1f", dist_s),
+            sprintf(str_w, "%6, 1f", dist_w));
     Serial.print(str);
     delay(T_CTRL);
   }
@@ -58,8 +58,8 @@ void test_vel_ctrl_fb(double vel_e, double vel_w) {
     if (i >= 10) {
       vel_ctrl_get(0, &vel_e, 0, &vel_w);
       sprintf(str, "vel_e = %s, vel_w = %s\n",
-              dtostrf(vel_e, 6, 1, str_e),
-              dtostrf(vel_w, 6, 1, str_w));
+             sprintf(str_e, "%6, 1f", vel_e),
+             sprintf(str_w, "%6, 1f", vel_w));
       Serial.print(str);
       i = 0;
     }
@@ -80,8 +80,8 @@ void test_vel_ctrl_lr(double vel_n, double vel_s) {
     if (i >= 10) {
       vel_ctrl_get(&vel_n, 0, &vel_s, 0);
       sprintf(str, "vel_n = %s, vel_s = %s\n",
-              dtostrf(vel_n, 6, 1, str_n),
-              dtostrf(vel_s, 6, 1, str_s));
+              sprintf(str_n, "%6, 1f", vel_n),
+              sprintf(str_s, "%6, 1f", vel_s));
       Serial.print(str);
       i = 0;
     }
@@ -102,10 +102,10 @@ void test_vel_ctrl_lr(double vel_n, double vel_e, double vel_s, double vel_w) {
     if (i >= 10) {
       vel_ctrl_get(&vel_n, &vel_e, &vel_s, &vel_w);
       sprintf(str, "vel_n = %s, vel_e = %s, vel_s = %s\n, vel_w = %s\n",
-              dtostrf(vel_n, 6, 1, str_n),
-              dtostrf(vel_e, 6, 1, str_e),
-              dtostrf(vel_s, 6, 1, str_s),
-              dtostrf(vel_w, 6, 1, str_w));
+              sprintf(str_n, "%6, 1f", vel_n),
+              sprintf(str_e, "%6, 1f", vel_e),
+              sprintf(str_s, "%6, 1f", vel_s),
+              sprintf(str_w, "%6, 1f", vel_w));
       Serial.print(str);
       i = 0;
     }
@@ -129,8 +129,8 @@ void test_run_ctrl(run_state_t state, double speed, double dist) {
       run_ctrl_get(&state, &speed, &dist);
       sprintf(str, "state = %s, speed = %s, dist = %s\n",
               ((state == STR_FB) ? "STR_FB" : (state == STR_LR) ? "STR_LR" : "STOP"),
-              dtostrf(speed, 6, 1, str_speed),
-              dtostrf(dist, 6, 1, str_dist));
+              sprintf(str_speed, "%6, 1f", speed),
+              sprintf(str_dist, "%6, 1f", dist));
       Serial.print(str);
       i = 0;
     }
@@ -145,7 +145,7 @@ void test_batt() {
 
   while (1) {
     batt = io_get_batt();
-    sprintf(str, "volt = %s\n", dtostrf(batt, 4, 2, str_batt));
+    sprintf(str, "volt = %s\n", sprintf(str_batt, "%4.2f", batt));
     Serial.print(str);
     delay(T_CTRL);
   }
