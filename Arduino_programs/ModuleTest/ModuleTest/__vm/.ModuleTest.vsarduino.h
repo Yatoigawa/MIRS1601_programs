@@ -229,6 +229,5 @@ __attribute__((always_inline)) static __INLINE void __set_PRIMASK(uint32_t priMa
 
 #include "ModuleTest.ino"
 #include "PinAssignment.ino"
-#include "SerialFunction.ino"
 #include "TestPrograms.ino"
 #endif
