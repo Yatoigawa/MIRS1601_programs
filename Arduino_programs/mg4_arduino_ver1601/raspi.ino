@@ -1,5 +1,5 @@
 void raspi_open() {
-  Serial.begin(9600);
+  Serial.begin(115200);
 
   // バッファのクリア
   while (Serial.available() > 0) {

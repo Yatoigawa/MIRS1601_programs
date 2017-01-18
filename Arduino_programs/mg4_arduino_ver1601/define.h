@@ -1,3 +1,6 @@
+#include <Arduino.h>
+#include <stdlib.h>
+#include "USS.h"
 /* 変数型の定義 */
 typedef enum {
   STOP = 0,
@@ -7,6 +10,14 @@ typedef enum {
   STR_FL_BR,
   ROT
 } run_state_t;
+
+typedef enum {
+  OMN_STOP,
+  OMN_N,
+  OMN_E,
+  OMN_S,
+  OMN_W
+} omuni_state_t;
 
 typedef struct {
   unsigned char val[7];
@@ -19,14 +30,6 @@ typedef struct {
 typedef struct {
   signed short val[3];
 } command_data_t;
-
-typedef union {
-  uint16_t val;
-  struct {
-    uint8_t lsb;
-    uint8_t msb;
-  };
-} infrared_data_t;
 
 /* ピン配置 */
 //ENCODER
@@ -51,6 +54,20 @@ typedef union {
 #define MTR_S2 38
 #define MTR_W1 39
 #define MTR_W2 40
+//USS
+#define USS_N 25
+#define USS_E 26
+#define USS_S 27
+#define USS_W 28
+//IR_A,IR_B
+#define IR_CS 23
+#define IR_CLK 42
+//TAPELED
+#define TL_0 29
+#define TL_1 30
+#define TL_2 32
+//MP3_A,MP3_B
+#define MP3_CS 24
 
 #define PIN_SW      10
 #define PIN_LED     13
@@ -62,7 +79,7 @@ typedef union {
 #define R_TIRE     3.2    // タイヤ半径 [cm]
 #define D_TIRE    25.0    // タイヤ間隔 [cm]
 #define ENC_RANGE (100*2) // エンコーダ分解能 (A相立上り/立下りを利用するため2倍)
-#define T_E_RATIO 16.0    // タイヤに対するエンコーダの回転比
+#define T_E_RATIO 1.0    // タイヤに対するエンコーダの回転比
 #define E_W_RATIO  1.0    // 東タイヤに対する西タイヤの回転比
 #define N_S_RATIO  1.0    // 北タイヤに対する南タイヤの回転比
 
