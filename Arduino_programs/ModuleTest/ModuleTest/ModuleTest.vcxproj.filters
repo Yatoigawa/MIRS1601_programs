@@ -16,7 +16,6 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="ModuleTest.ino" />
-    <None Include="SerialFunction.ino" />
     <None Include="PinAssignment.ino" />
     <None Include="TestPrograms.ino" />
   </ItemGroup>
