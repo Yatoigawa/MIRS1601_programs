@@ -26,6 +26,9 @@ public:
 			digitalWrite(this->_LED[i], state);
 		}
 		delay(delayTime);
+		for (i = 0; i < sizeof(this->_LED) / sizeof(this->_LED[0]); i++) {
+			digitalWrite(this->_LED[i], LOW);
+		}
 	}
 
 private:
