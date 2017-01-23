@@ -4,15 +4,15 @@ static double omuni_speed_curr = 0.0;
 
 void omuni_ctrl_execute(){
 
-  int uss_n = 1;
-  int uss_e = 2;
-  int uss_s = 3;
-  int uss_w = 4;
+  int uss_n = USS_N;
+  int uss_e = USS_E;
+  int uss_s = USS_S;
+  int uss_w = USS_W;
 
-  int dist_wall_n = 20; //北側の壁との目標距離
-  int dist_wall_e  = 20; //東側の壁との目標距離
-  int dist_wall_s = 20; //南側の壁との目標距離
-  int dist_wall_w  = 20; //西側の壁との目標距離
+  int dist_wall_n = 10; //北側の壁との目標距離
+  int dist_wall_e  = 10; //東側の壁との目標距離
+  int dist_wall_s = 10; //南側の壁との目標距離
+  int dist_wall_w  = 10; //西側の壁との目標距離
   
   int err_n;  //北側の壁まで距離と現在地の差
   int err_e;  //東側の壁まで距離と現在地の差
@@ -21,7 +21,7 @@ void omuni_ctrl_execute(){
   
   double adj_vel;      //加算or減算する修正値 adjust value
   double Kp = 1.0;     //差分距離err_Xと加減速補正add_velに対する比例ゲイン
-  double dist_vel_down = 0.0; //残距離に応じて減速するための係数
+  double dist_vel_down = 0.0; //残距離に応じて減速し始める距離[cm]
   double  v_n, v_s, v_e, v_w, ratio, vel_ref;
 
   USS distNorth(uss_n);
@@ -36,70 +36,12 @@ void omuni_ctrl_execute(){
   case OMN_STOP:  //全停止
     vel_ctrl_set(0.0, 0.0, 0.0, 0.0);
     break;
-  
-  case OMN_E:     //北と南側の壁を基準として東方向へ走行
-    omuni_speed_curr = (v_n + v_s) / 2.0;
-    err_n = dist_wall_n - distNorth.getCM();
-    err_e = dist_wall_e - distEast.getCM();
-    err_s = dist_wall_s - distSouth.getCM();
-    ratio = err_e / dist_vel_down;  //減速率
-    if (ratio < 0.0){
-      ratio = 0.0;
-    }
-    if (ratio > 1.0){
-      ratio = 1.0;
-    }
-    if(err_e <= dist_wall_e){
-      //東側の壁との距離が目標距離以内なら全停止
-      omuni_state = OMN_STOP;
-      vel_ctrl_set(0.0, 0.0, 0.0, 0.0);
-    }else if(err_n >= dist_wall_n || err_s <= dist_wall_s){
-      //北側の壁から離れ、南側の壁に近づいている場合
-      vel_ref = omuni_speed_ref * ratio;
-      adj_vel = Kp * (dist_wall_n + dist_wall_s) / 2; 
-      vel_ctrl_set(vel_ref - adj_vel, 0, vel_ref + adj_vel, 0);
-    }else if(err_n <= dist_wall_n || err_s >= dist_wall_s){
-      //南側の壁から離れ、北側の壁に近づいている場合
-      vel_ref = omuni_speed_ref * ratio;
-      adj_vel = Kp * (dist_wall_n + dist_wall_s) / 2; 
-      vel_ctrl_set(vel_ref + adj_vel, 0, vel_ref - adj_vel, 0);
-    }
-    break;
 
-    case OMN_W:     //北と南側の壁を基準として西方向へ走行
-    omuni_speed_curr = (v_n + v_s) / 2.0;
-    err_n = dist_wall_n - distNorth.getCM();
-    err_w = dist_wall_w - distWest.getCM();
-    err_s = dist_wall_s - distSouth.getCM();
-    ratio = err_w / dist_vel_down;  //減速率
-    if (ratio < 0.0){
-      ratio = 0.0;
-    }
-    if (ratio > 1.0){
-      ratio = 1.0;
-    }
-    if(err_w <= dist_wall_w){
-      //西側の壁との距離が目標距離以内なら全停止
-      omuni_state = OMN_STOP;
-      vel_ctrl_set(0.0, 0.0, 0.0, 0.0);
-    }else if(err_n >= dist_wall_n || err_s <= dist_wall_s){
-      //北側の壁から離れ、南側の壁に近づいている場合
-      vel_ref = omuni_speed_ref * ratio;
-      adj_vel = Kp * (dist_wall_n + dist_wall_s) / 2; 
-      vel_ctrl_set(-vel_ref + adj_vel, 0, -vel_ref - adj_vel, 0);
-    }else if(err_n <= dist_wall_n || err_s >= dist_wall_s){
-      //南側の壁から離れ、北側の壁に近づいている場合
-      vel_ref = omuni_speed_ref * ratio;
-      adj_vel = Kp * (dist_wall_n + dist_wall_s) / 2; 
-      vel_ctrl_set(-vel_ref - adj_vel, 0, -vel_ref + adj_vel, 0);
-    }
-    break;
-
-    case OMN_N:     //東と西側の壁を基準として北方向へ走行
+  case OMN_N:     //東と西側の壁を基準として北方向へ走行
     omuni_speed_curr = (v_e + v_w) / 2.0;
-    err_n = dist_wall_n - distNorth.getCM();
-    err_e = dist_wall_e - distEast.getCM();
-    err_w = dist_wall_w - distWest.getCM();
+    err_n = distNorth.getCM() - dist_wall_n;  //壁との距離
+    err_e = distEast.getCM() - dist_wall_e;
+    err_w = distWest.getCM() - dist_wall_w;
     ratio = err_n / dist_vel_down;  //減速率
     if (ratio < 0.0){
       ratio = 0.0;
@@ -107,51 +49,334 @@ void omuni_ctrl_execute(){
     if (ratio > 1.0){
       ratio = 1.0;
     }
-    if(err_n <= dist_wall_n){
+    if(err_n <= 0){
       //北側の壁との距離が目標距離以内なら全停止
       omuni_state = OMN_STOP;
       vel_ctrl_set(0.0, 0.0, 0.0, 0.0);
-    }else if(err_e >= dist_wall_e || err_w <= dist_wall_e){
+    }else if(err_e >= 0 || err_w <= 0){
       //東側の壁から離れ、西側の壁に近づいている場合
-      vel_ref = omuni_speed_ref * ratio;
-      adj_vel = Kp * (dist_wall_n + dist_wall_s) / 2; 
+    vel_ref = omuni_speed_ref * ratio;
+      adj_vel = Kp * (abs(err_e) + abs(err_w)) / 2; 
       vel_ctrl_set(0, vel_ref - adj_vel, 0, vel_ref + adj_vel);
-    }else if(err_e <= dist_wall_e || err_w >= dist_wall_w){
+    }else if(err_e <= 0 || err_w >= 0){
       //西側の壁から離れ、東側の壁に近づいている場合
       vel_ref = omuni_speed_ref * ratio;
-      adj_vel = Kp * (dist_wall_n + dist_wall_s) / 2; 
+      adj_vel = Kp * (abs(err_e) + abs(err_w)) / 2; 
       vel_ctrl_set(0, vel_ref + adj_vel, 0, vel_ref - adj_vel);
     }
     break;
-
-    case OMN_S:     //東と西側の壁を基準として南方向へ走行
-    omuni_speed_curr = (v_e + v_w) / 2.0;
-    err_s = dist_wall_s - distSouth.getCM();
-    err_e = dist_wall_e - distEast.getCM();
-    err_w = dist_wall_w - distWest.getCM();
-    ratio = err_s / dist_vel_down;  //減速率
+    
+  case OMN_E:     //北と南側の壁を基準として東方向へ走行
+    omuni_speed_curr = (v_n + v_s) / 2.0;
+    err_n = distNorth.getCM() - dist_wall_n;  //壁との距離
+    err_e = distEast.getCM() - dist_wall_e;
+    err_s = distSouth.getCM() - dist_wall_s;
+    ratio = err_e / dist_vel_down;  //壁との距離/減速し始める距離
     if (ratio < 0.0){
       ratio = 0.0;
     }
     if (ratio > 1.0){
       ratio = 1.0;
     }
-    if(err_s <= dist_wall_s){
-      //南側の壁との距離が目標距離以内なら全停止
+    if(err_e <= 0){
+      //東側の壁との距離が目標距離以内なら全停止
       omuni_state = OMN_STOP;
       vel_ctrl_set(0.0, 0.0, 0.0, 0.0);
-    }else if(err_e >= dist_wall_e || err_w <= dist_wall_e){
-      //東側の壁から離れ、西側の壁に近づいている場合
+    }else if(err_n >= 0 || err_s <= 0){
+      //北側の壁から離れ、南側の壁に近づいている場合
       vel_ref = omuni_speed_ref * ratio;
-      adj_vel = Kp * (dist_wall_n + dist_wall_s) / 2; 
-      vel_ctrl_set(0, -vel_ref + adj_vel, 0, -vel_ref - adj_vel);
-    }else if(err_e <= dist_wall_e || err_w >= dist_wall_w){
-      //西側の壁から離れ、東側の壁に近づいている場合
+      adj_vel = Kp * (abs(err_n) + abs(err_s)) / 2; 
+      vel_ctrl_set(vel_ref - adj_vel, 0, vel_ref + adj_vel, 0);
+    }else if(err_n <= 0 || err_s >= 0){
+      //南側の壁から離れ、北側の壁に近づいている場合
       vel_ref = omuni_speed_ref * ratio;
-      adj_vel = Kp * (dist_wall_n + dist_wall_s) / 2; 
-      vel_ctrl_set(0, -vel_ref - adj_vel, 0, -vel_ref + adj_vel);
+      adj_vel = Kp * (abs(err_n) + abs(err_s)) / 2; 
+      vel_ctrl_set(vel_ref + adj_vel, 0, vel_ref - adj_vel, 0);
     }
-    break;    
+    break;
+
+    case OMN_S:     //東と西側の壁を基準として南方向へ走行
+      omuni_speed_curr = (v_e + v_w) / 2.0;
+      err_w = distWest.getCM() - dist_wall_w;  //壁との距離
+      err_e = distEast.getCM() - dist_wall_e;
+      err_s = distSouth.getCM() - dist_wall_s;
+      ratio = err_s / dist_vel_down;  //減速率
+      if (ratio < 0.0){
+        ratio = 0.0;
+      }
+      if (ratio > 1.0){
+        ratio = 1.0;
+      }
+      if(err_s <= 0){
+        //南側の壁との距離が目標距離以内なら全停止
+        omuni_state = OMN_STOP;
+        vel_ctrl_set(0.0, 0.0, 0.0, 0.0);
+      }else if(err_e >= 0 || err_w <= 0){
+        //東側の壁から離れ、西側の壁に近づいている場合
+        vel_ref = omuni_speed_ref * ratio;
+        adj_vel = Kp * (abs(err_e) + abs(err_w)) / 2; 
+        vel_ctrl_set(0, -vel_ref + adj_vel, 0, -vel_ref - adj_vel);
+      }else if(err_e <= 0 || err_w >= 0){
+        //西側の壁から離れ、東側の壁に近づいている場合
+        vel_ref = omuni_speed_ref * ratio;
+        adj_vel = Kp * (abs(err_e) + abs(err_w)) / 2; 
+        vel_ctrl_set(0, -vel_ref - adj_vel, 0, -vel_ref + adj_vel);
+      }
+      break;
+
+    case OMN_W:     //北と南側の壁を基準として西方向へ走行
+      omuni_speed_curr = (v_n + v_s) / 2.0;
+      err_n = distNorth.getCM() - dist_wall_n;  //壁との距離
+      err_w = distWest.getCM() - dist_wall_w;
+      err_s = distSouth.getCM() - dist_wall_s;
+      ratio = err_w / dist_vel_down;  //減速率
+      if (ratio < 0.0){
+        ratio = 0.0;
+      }
+      if (ratio > 1.0){
+        ratio = 1.0;
+      }
+      if(err_w <= 0){
+        //西側の壁との距離が目標距離以内なら全停止
+        omuni_state = OMN_STOP;
+        vel_ctrl_set(0.0, 0.0, 0.0, 0.0);
+      }else if(err_n >= 0 || err_s <= 0){
+        //北側の壁から離れ、南側の壁に近づいている場合
+        vel_ref = omuni_speed_ref * ratio;
+        adj_vel = Kp * (abs(err_n) + abs(err_s)) / 2; 
+        vel_ctrl_set(-vel_ref + adj_vel, 0, -vel_ref - adj_vel, 0);
+      }else if(err_n <= 0 || err_s >= 0){
+        //南側の壁から離れ、北側の壁に近づいている場合
+        vel_ref = omuni_speed_ref * ratio;
+        adj_vel = Kp * (abs(err_n) + abs(err_s)) / 2; 
+        vel_ctrl_set(-vel_ref - adj_vel, 0, -vel_ref + adj_vel, 0);
+      }
+     break;
+//----------------------------------------------------------------------------------
+
+    case OMN_NDE: //東側の壁のみを基準にして北向きに走行する場合
+      omuni_speed_curr = (v_n + v_s) / 2.0;
+      err_e = distEast.getCM() - dist_wall_e;  //壁との距離
+      err_n = distNorth.getCM() - dist_wall_n;
+      ratio = err_e / dist_vel_down;  //減速率
+      if (ratio < 0.0){
+        ratio = 0.0;
+      }
+      if (ratio > 1.0){
+        ratio = 1.0;
+      }
+      if(err_n <= 0){
+        //北側の壁との距離が目標距離以内なら全停止
+        omuni_state = OMN_STOP;
+        vel_ctrl_set(0.0, 0.0, 0.0, 0.0);
+      }else if(err_e <= 0){
+        //東側の壁に近づいている場合
+        vel_ref = omuni_speed_ref * ratio;
+        adj_vel = Kp * abs(err_e); 
+        vel_ctrl_set(0, vel_ref + adj_vel, 0, vel_ref - adj_vel);
+      }else if(err_e >= 0){
+        //東側の壁から離れている場合
+        vel_ref = omuni_speed_ref * ratio;
+        adj_vel = Kp * abs(err_e); 
+        vel_ctrl_set(0, vel_ref - adj_vel, 0, vel_ref + adj_vel);
+      }
+      break;
+
+    case OMN_NDW: //西側の壁のみを基準にして北向きに走行する場合
+      omuni_speed_curr = (v_n + v_s) / 2.0;
+      err_w = distWest.getCM() - dist_wall_w;  //壁との距離
+      err_n = distNorth.getCM() - dist_wall_n;
+      ratio = err_n / dist_vel_down;  //減速率
+      if (ratio < 0.0){
+        ratio = 0.0;
+      }
+      if (ratio > 1.0){
+        ratio = 1.0;
+      }
+      if(err_n <= 0){
+        //北側の壁との距離が目標距離以内なら全停止
+        omuni_state = OMN_STOP;
+        vel_ctrl_set(0.0, 0.0, 0.0, 0.0);
+      }else if(err_w <= 0){
+        //西側の壁に近づいている場合
+        vel_ref = omuni_speed_ref * ratio;
+        adj_vel = Kp * abs(err_w); 
+        vel_ctrl_set(0, vel_ref - adj_vel, 0, vel_ref + adj_vel);
+      }else if(err_w >= 0){
+        //西側の壁から離れている場合
+        vel_ref = omuni_speed_ref * ratio;
+        adj_vel = Kp * abs(err_w); 
+        vel_ctrl_set(0, vel_ref + adj_vel, 0, vel_ref - adj_vel);
+      }
+      break;
+
+    case OMN_EDS: //南側の壁のみを基準にして東向きに走行する場合
+      omuni_speed_curr = (v_n + v_s) / 2.0;
+      err_e = distEast.getCM() - dist_wall_e;  //壁との距離
+      err_s = distSouth.getCM() - dist_wall_s;
+      ratio = err_e / dist_vel_down;  //減速率
+      if (ratio < 0.0){
+        ratio = 0.0;
+      }
+      if (ratio > 1.0){
+        ratio = 1.0;
+      }
+      if(err_e <= 0){
+        //東側の壁との距離が目標距離以内なら全停止
+        omuni_state = OMN_STOP;
+        vel_ctrl_set(0.0, 0.0, 0.0, 0.0);
+      }else if(err_s <= 0){
+        //南側の壁に近づいている場合
+        vel_ref = omuni_speed_ref * ratio;
+        adj_vel = Kp * abs(err_s); 
+        vel_ctrl_set(vel_ref - adj_vel, 0, vel_ref + adj_vel, 0);
+      }else if(err_s >= 0){
+        //南側の壁から離れている場合
+        vel_ref = omuni_speed_ref * ratio;
+        adj_vel = Kp * abs(err_s); 
+        vel_ctrl_set(vel_ref + adj_vel, 0, vel_ref - adj_vel, 0);
+      }
+      break;
+      
+    case OMN_EDN: //北側の壁のみを基準にして東向きに走行する場合
+      omuni_speed_curr = (v_n + v_s) / 2.0;
+      err_e = distEast.getCM() - dist_wall_e;  //壁との距離
+      err_n = distNorth.getCM() - dist_wall_n;
+      ratio = err_e / dist_vel_down;  //減速率
+      if (ratio < 0.0){
+        ratio = 0.0;
+      }
+      if (ratio > 1.0){
+        ratio = 1.0;
+      }
+      if(err_e <= 0){
+        //東側の壁との距離が目標距離以内なら全停止
+        omuni_state = OMN_STOP;
+        vel_ctrl_set(0.0, 0.0, 0.0, 0.0);
+      }else if(err_n <= 0){
+        //北側の壁に近づいている場合
+        vel_ref = omuni_speed_ref * ratio;
+        adj_vel = Kp * abs(err_n); 
+        vel_ctrl_set(vel_ref + adj_vel, 0, vel_ref - adj_vel, 0);
+      }else if(err_n >= 0){
+        //北側の壁から離れている場合
+        vel_ref = omuni_speed_ref * ratio;
+        adj_vel = Kp * abs(err_n); 
+        vel_ctrl_set(vel_ref - adj_vel, 0, vel_ref + adj_vel, 0);
+      }
+      break;
+
+    case OMN_SDE: //東側の壁のみを基準にして南向きに走行する場合
+      omuni_speed_curr = (v_e + v_w) / 2.0;
+      err_e = distEast.getCM() - dist_wall_e;  //壁との距離
+      err_s = distSouth.getCM() - dist_wall_s;
+      ratio = err_s / dist_vel_down;  //減速率
+      if (ratio < 0.0){
+        ratio = 0.0;
+      }
+      if (ratio > 1.0){
+        ratio = 1.0;
+      }
+      if(err_s <= 0){
+        //南側の壁との距離が目標距離以内なら全停止
+        omuni_state = OMN_STOP;
+        vel_ctrl_set(0.0, 0.0, 0.0, 0.0);
+      }else if(err_e <= 0){
+        //東側の壁に近づいている場合
+        vel_ref = omuni_speed_ref * ratio;
+        adj_vel = Kp * abs(err_e); 
+        vel_ctrl_set(0, -vel_ref - adj_vel, 0, -vel_ref + adj_vel);
+      }else if(err_e >= 0){
+        //東側の壁から離れている場合
+        vel_ref = omuni_speed_ref * ratio;
+        adj_vel = Kp * abs(err_e); 
+        vel_ctrl_set(0, -vel_ref + adj_vel, 0, -vel_ref - adj_vel);
+      }
+      break;
+
+    case OMN_SDW: //西側の壁のみを基準にして南向きに走行する場合
+      omuni_speed_curr = (v_e + v_w) / 2.0;
+      err_w = distWest.getCM() - dist_wall_w;  //壁との距離
+      err_s = distSouth.getCM() - dist_wall_s;
+      ratio = err_s / dist_vel_down;  //減速率
+      if (ratio < 0.0){
+        ratio = 0.0;
+      }
+      if (ratio > 1.0){
+        ratio = 1.0;
+      }
+      if(err_s <= 0){
+        //南側の壁との距離が目標距離以内なら全停止
+        omuni_state = OMN_STOP;
+        vel_ctrl_set(0.0, 0.0, 0.0, 0.0);
+      }else if(err_w <= 0){
+        //西側の壁に近づいている場合
+        vel_ref = omuni_speed_ref * ratio;
+        adj_vel = Kp * abs(err_w); 
+        vel_ctrl_set(0, -vel_ref + adj_vel, 0, -vel_ref - adj_vel);
+      }else if(err_w >= 0){
+        //東側の壁から離れている場合
+        vel_ref = omuni_speed_ref * ratio;
+        adj_vel = Kp * abs(err_w); 
+        vel_ctrl_set(0, -vel_ref - adj_vel, 0, -vel_ref + adj_vel);
+      }
+      break;
+
+    case OMN_WDS: //南側の壁のみを基準にして西向きに走行する場合
+      omuni_speed_curr = (v_n + v_s) / 2.0;
+      err_w = distWest.getCM() - dist_wall_w;  //壁との距離
+      err_s = distSouth.getCM() - dist_wall_s;
+      ratio = err_w / dist_vel_down;  //減速率
+      if (ratio < 0.0){
+        ratio = 0.0;
+      }
+      if (ratio > 1.0){
+        ratio = 1.0;
+      }
+      if(err_w <= 0){
+        //西側の壁との距離が目標距離以内なら全停止
+        omuni_state = OMN_STOP;
+        vel_ctrl_set(0.0, 0.0, 0.0, 0.0);
+      }else if(err_s <= 0){
+        //南側の壁に近づいている場合
+        vel_ref = omuni_speed_ref * ratio;
+        adj_vel = Kp * abs(err_s); 
+        vel_ctrl_set(-vel_ref + adj_vel, 0, -vel_ref - adj_vel, 0);
+      }else if(err_s >= 0){
+        //南側の壁から離れている場合
+        vel_ref = omuni_speed_ref * ratio;
+        adj_vel = Kp * abs(err_s); 
+        vel_ctrl_set(-vel_ref - adj_vel, 0, -vel_ref + adj_vel, 0);
+      }
+      break;
+
+    case OMN_WDN: //北側の壁のみを基準にして西向きに走行する場合
+      omuni_speed_curr = (v_n + v_s) / 2.0;
+      err_w = distWest.getCM() - dist_wall_w;  //壁との距離
+      err_n = distNorth.getCM() - dist_wall_n;
+      ratio = err_w / dist_vel_down;  //減速率
+      if (ratio < 0.0){
+        ratio = 0.0;
+      }
+      if (ratio > 1.0){
+        ratio = 1.0;
+      }
+      if(err_w <= 0){
+        //南側の壁との距離が目標距離以内なら全停止
+        omuni_state = OMN_STOP;
+        vel_ctrl_set(0.0, 0.0, 0.0, 0.0);
+      }else if(err_n <= 0){
+        //南側の壁に近づいている場合
+        vel_ref = omuni_speed_ref * ratio;
+        adj_vel = Kp * abs(err_n); 
+        vel_ctrl_set(-vel_ref - adj_vel, 0, -vel_ref + adj_vel, 0);
+      }else if(err_n >= 0){
+        //南側の壁から離れている場合
+        vel_ref = omuni_speed_ref * ratio;
+        adj_vel = Kp * abs(err_n); 
+        vel_ctrl_set(-vel_ref + adj_vel, 0, -vel_ref - adj_vel, 0);
+      }
+      break;
   }  
 }
 
