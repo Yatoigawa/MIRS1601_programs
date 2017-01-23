@@ -1,17 +1,17 @@
-const int A_ENA = 13;
-const int A_IN1 = 12;
-const int A_IN2 = 11;
-const int A_IN3 = 10;
-const int A_IN4 = 9;
-const int A_ENB = 8;
+const int A_ENA = 4;
+const int A_IN1 = 40;
+const int A_IN2 = 39;
+const int A_IN3 = 38;
+const int A_IN4 = 37;
+const int A_ENB = 5;
 
-const int B_ENA = 7;
-const int B_IN1 = 6;
-const int B_IN2 = 5;
-const int B_IN3 = 4;
-const int B_IN4 = 3;
-const int B_ENB = 2;
-L298N_omuni driver(A_ENA,A_IN1,A_IN2,A_IN3,A_IN4,B_ENB,B_ENA,B_IN1,B_IN2,B_IN3,B_IN4,B_ENB);
+const int B_ENA = 6;
+const int B_IN1 = 36;
+const int B_IN2 = 35;
+const int B_IN3 = 34;
+const int B_IN4 = 33;
+const int B_ENB = 7;
+L298N_omuni driver = L298N_omuni(A_ENA,A_IN1,A_IN2,A_IN3,A_IN4,B_ENB,B_ENA,B_IN1,B_IN2,B_IN3,B_IN4,B_ENB);
 int time_delay = 0;
 
 void motor_open() {
