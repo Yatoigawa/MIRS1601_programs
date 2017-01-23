@@ -5,6 +5,7 @@ void setup() {
   encoder_open();
   motor_open();
   cpu_open();
+  infrared_open();
 }
 
 void loop() {
