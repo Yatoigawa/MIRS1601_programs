@@ -16,11 +16,11 @@ void test_distance() {
 
   while (1) {
     distance_get(&dist_n, &dist_e, &dist_s, &dist_w);
-    sprintf(str, "dist_n = %s, dist_e = %s, dist_s = %s, dist_w = %s\n",
-            sprintf(str_n, "%6, 1f", dist_n),
-            sprintf(str_e, "%6, 1f", dist_e),
-            sprintf(str_s, "%6, 1f", dist_s),
-            sprintf(str_w, "%6, 1f", dist_w));
+    sprintf(str_n, "%6.1f", dist_n);
+    sprintf(str_e, "%6.1f", dist_e);
+    sprintf(str_s, "%6.1f", dist_s);
+    sprintf(str_w, "%6.1f", dist_w);
+    sprintf(str, "dist_n = %s, dist_e = %s, dist_s = %s, dist_w = %s\n",str_n, str_e, str_s, str_w);
     Serial.print(str);
     delay(T_CTRL);
   }
@@ -42,7 +42,15 @@ void test_motor_lr(int pwm_n, int pwm_s) {
 //全方向へ進むモーターテスト(引数4つで動くモーターを指定、引数の順番は　北　東　南　西)
 void test_motor(int pwm_n, int pwm_e, int pwm_s, int pwm_w) {
   motor_set(pwm_n, pwm_e, pwm_s, pwm_w);
-  while (1) {}
+  while (1) {
+    if(Serial.available()){
+      char c = Serial.read();
+      if(c == 's') {
+          motor_set(0,0,0,0);
+          break;
+      }
+    }
+  }
 }
 
 

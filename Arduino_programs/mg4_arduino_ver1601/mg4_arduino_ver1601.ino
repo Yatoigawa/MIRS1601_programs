@@ -1,10 +1,10 @@
 #include "define.h"
 
 void setup() {
-  io_open();
   encoder_open();
   motor_open();
   cpu_open();
+  infrared_open();
 }
 
 void loop() {
