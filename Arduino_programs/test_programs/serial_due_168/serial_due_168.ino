@@ -24,24 +24,28 @@ void loop() {
   Serial.print("count bef: ");
   Serial.print(i);
   delay(50);
-  if (data.val > 0) {
+  if (data.val > 0 && data.val < 4095) {
     Serial.print(" count aft: ");
     Serial.print(i);
     Serial.print(" data: ");
     Serial.print(data.val, DEC);
+    Serial.print(" data.lsb: ");
+    Serial.print(data.lsb, DEC);
+    Serial.print(" data.msb: ");
+    Serial.print(data.msb, DEC);
   }
   Serial.println("");
 //  i++;
 //  if (i > 7) {
 //    i = 0;
 //  }
-  delay(200);
+  delay(950);
 }
 
 void serial_task() {
-  if (Serial2.available() > 2) {
+  if (Serial2.available() > 3) {
     if (Serial2.read() == 0xA4) {
-      data.msb = (Serial2.read() /* & 0x0F */);
+      data.msb = (Serial2.read() & 0x0F);
       data.lsb =  Serial2.read();
     }
   }
