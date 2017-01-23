@@ -13,19 +13,15 @@ feture :
 
 #include "Arduino.h"
 
-class BlinkLED_binary
-{
+class BlinkLED_binary {
 public:
 	BlinkLED_binary(int LED1, int LED2, int LED3);
 
-	void BlinkLED(int dec, int delayTime)
-	{
+	void BlinkLED(int dec, int delayTime) {
 		int i;
 		int j;
 		byte state;
-		for (i = 0, j = 1; i < sizeof(this->_LED) / sizeof(this->_LED[0]); i++, j = j * 2)
-		{
-			//この()は重要。ないと挙動がおかしくなる
+		for (i = 0, j = 1; i < sizeof(this->_LED) / sizeof(this->_LED[0]); i++, j = j << 1) {
 			state = (dec & j) > 0 ? HIGH : LOW;
 			digitalWrite(this->_LED[i], state);
 		}

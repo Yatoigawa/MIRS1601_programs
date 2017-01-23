@@ -12,7 +12,8 @@ feture :
 #include "BlinkLED_binary.h"
 
 //初期化子リスト C++0x以降でないと使えない模様
-BlinkLED_binary::BlinkLED_binary(int LED1, int LED2, int LED3) : _LED{ LED1,LED2,LED3 }
+BlinkLED_binary::BlinkLED_binary(int LED1, int LED2, int LED3)
+	: _LED{ LED1,LED2,LED3 }
 {
 	pinMode(LED1, OUTPUT);
 	pinMode(LED2, OUTPUT);
