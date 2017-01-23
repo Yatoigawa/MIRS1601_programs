@@ -33,9 +33,6 @@ public:
 	void rightBackward(int speed, int delay_time);
 	void leftBackward(int speed, int delay_time);
 
-	void turnRight(int speed, int delay_time);
-	void turnLeft(int speed, int delay_time);
-
 	void fullStop(int delay_time);
 
 	void driveMotors(int speed);

@@ -117,20 +117,6 @@ void L298N_omuni::leftBackward(int speed, int delay_time)
 	delay(delay_time);
 }
 
-void L298N_omuni::turnRight(int speed, int delay_time)
-{
-	this->setupMotors(B10010110);
-	this->driveMotors(speed);
-	delay(delay_time);
-}
-
-void L298N_omuni::turnLeft(int speed, int delay_time)
-{
-	this->setupMotors(B01101001);
-	this->driveMotors(speed);
-	delay(delay_time);
-}
-
 void L298N_omuni::fullStop(int delay_time)
 {
 	this->setupMotors(B00000000);
