@@ -15,6 +15,12 @@ L298N_omuni driver(A_ENA,A_IN1,A_IN2,A_IN3,A_IN4,B_ENB,B_ENA,B_IN1,B_IN2,B_IN3,B
 int time_delay = 0;
 
 void motor_open() {
+  pinMode(PIN_DIR_L, OUTPUT);
+  pinMode(PIN_PWM_L, OUTPUT);
+  pinMode(PIN_DIR_R, OUTPUT);
+  pinMode(PIN_PWM_R, OUTPUT);
+  analogWrite(PIN_PWM_L, 0);
+  analogWrite(PIN_PWM_R, 0);
   
   pinMode(MTR_1ENA, OUTPUT);
   pinMode(MTR_1ENB, OUTPUT);
