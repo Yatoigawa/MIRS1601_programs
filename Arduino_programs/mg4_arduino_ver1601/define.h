@@ -1,6 +1,7 @@
 #include <Arduino.h>
 #include <stdlib.h>
 #include "USS.h"
+#include "L298N_omuni.h"
 /* 変数型の定義 */
 typedef enum {
   STOP = 0,
@@ -16,7 +17,15 @@ typedef enum {
   OMN_N,
   OMN_E,
   OMN_S,
-  OMN_W
+  OMN_W,
+  OMN_NDE,
+  OMN_NDW,
+  OMN_EDS,
+  OMN_EDN,
+  OMN_SDE,
+  OMN_SDW,
+  OMN_WDS,
+  OMN_WDN
 } omuni_state_t;
 
 typedef struct {
@@ -30,7 +39,7 @@ typedef struct {
 typedef struct {
   signed short val[3];
 } command_data_t;
- 
+
 typedef union {
   uint16_t val;
   struct {
@@ -84,11 +93,11 @@ typedef union {
 /* パラメータ */
 #define T_CTRL 10 // 動作周期 [ms]
 
-#define R_TIRE     3.2    // タイヤ半径 [cm]
-#define D_TIRE    25.0    // タイヤ間隔 [cm]
-#define ENC_RANGE (100*2) // エンコーダ分解能 (A相立上り/立下りを利用するため2倍)
-#define T_E_RATIO 1.0    // タイヤに対するエンコーダの回転比
-#define E_W_RATIO  1.0    // 東タイヤに対する西タイヤの回転比
-#define N_S_RATIO  1.0    // 北タイヤに対する南タイヤの回転比
+#define R_TIRE      6.75  // タイヤ半径 [cm]
+#define D_TIRE      25.0  // タイヤ間隔 [cm]
+#define ENC_RANGE   360/2   // エンコーダ分解能 (A相立上り/立下りを利用するため2倍)
+#define T_E_RATIO   2.0   // タイヤに対するエンコーダの回転比
+#define E_W_RATIO   1.0   // 東タイヤに対する西タイヤの回転比
+#define N_S_RATIO   1.0   // 北タイヤに対する南タイヤの回転比
 
 #define V_RATIO 0.25 // バッテリ入力の分圧比
