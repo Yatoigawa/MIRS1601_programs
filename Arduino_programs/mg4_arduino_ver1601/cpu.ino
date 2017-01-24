@@ -14,13 +14,19 @@ void cpu_num_trans(uint8_t cam_no){
   while(true){
     if(Serial.available() > 0){
       if(Serial.read() == 'n'){
-        ret_data = Serial.read();
-        ret_data = Serial.read();
         break;
       }
     }
   }
 }
 
-
-
+int cpu_com_read(char *c){
+  int ret;
+  if(Serial.available() > 0){
+    if(Serial.read() == 'c'){
+      *c = Serial.read();
+    }
+    return 0;
+  }
+  return -1;
+}
