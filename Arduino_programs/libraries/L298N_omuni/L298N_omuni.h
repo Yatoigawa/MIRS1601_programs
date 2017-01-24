@@ -1,4 +1,3 @@
-
 /*
 file   : L298N_omuni.h
 Create : 2016/12/02
@@ -22,23 +21,42 @@ public:
 
 	L298N_omuni(const int (&motor_driver_A)[6], const int (&motor_driver_B)[6]);
 
+	//*******
+	//PWM同じ
+	//*******
 	void forward(int speed, int delay_time);
 	void backward(int speed, int delay_time);
-
-	void right(int speed, int delay_time);
+	
+	void right(int speed, int delay_time);	
 	void left(int speed, int delay_time);
-
+	
 	void rightForward(int speed, int delay_time);
 	void leftForward(int speed, int delay_time);
 	void rightBackward(int speed, int delay_time);
 	void leftBackward(int speed, int delay_time);
-
+	
 	void fullStop(int delay_time);
 
-	void driveMotors(int speed);
-	void driveMotor(int motor_index, int speed);
+	//*******
+	//PWM個別
+	//*******
+	void forward(int(&speed)[4], int delay_time);
+	void backward(int(&speed)[4], int delay_time);
+	
+	void right(int(&speed)[4], int delay_time);
+	void left(int(&speed)[4], int delay_time);
+
+	void rightForward(int(&speed)[4], int delay_time);
+	void leftForward(int(&speed)[4], int delay_time);
+	void rightBackward(int(&speed)[4], int delay_time);
+	void leftBackward(int(&speed)[4], int delay_time);
+
+
 	void setupMotors(byte state);
 	void setupMotor(int motor_index, int state1, int state2);
+	void driveMotors(int speed);
+	void driveMotors(int (&speed)[4]);
+	void driveMotor(int motor_index, int speed);
 
 private:
 	static const int MOTOR_N = 0;
@@ -46,14 +64,14 @@ private:
 	static const int MOTOR_E = 2;
 	static const int MOTOR_W = 3;
 	
-	static const byte Bforward = B00001001;
-	static const byte Bbackward = B00000110;
-	static const byte Bright = B01100000;
-	static const byte Bleft = B10010000;
-	static const byte BrightForward = B01101001;
-	static const byte BleftForward = B10011001;
-	static const byte BrightBackward = B01100110;
-	static const byte BleftBackward = B10010110;
+	static const byte Bforward =		B00001001;
+	static const byte Bbackward =		B00000110;
+	static const byte Bright =			B01100000;
+	static const byte Bleft =			B10010000;
+	static const byte BrightForward =	B01101001;
+	static const byte BleftForward =	B10011001;
+	static const byte BrightBackward =	B01100110;
+	static const byte BleftBackward =	B10010110;
 	
 	struct Motor {
 		int in1;

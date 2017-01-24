@@ -88,7 +88,7 @@ private:
 
 	void isSafeSpeed() {
 		if (this->speed > 225) {
-			this->speed = 225;
+			this->speed = 255;
 		}
 		if (this->speed < 0) {
 			this->speed = 0;
@@ -143,6 +143,26 @@ private:
 				omuni.fullStop(timeDelay);
 				this->key_command_old = key_command;
 				break;
+			case 'w':
+				Serial.println("n");
+				omuni.setupMotor(0, HIGH, LOW);
+				omuni.driveMotor(0, speed);
+				this->key_command_old = key_command;
+			case 's':
+				Serial.println("s");
+				omuni.setupMotor(1, HIGH, LOW);
+				omuni.driveMotor(0, speed);
+				this->key_command_old = key_command;
+			case 'd':
+				Serial.println("e");
+				omuni.setupMotor(2, HIGH, LOW);
+				omuni.driveMotor(0, speed);
+				this->key_command_old = key_command;
+			case 'a':
+				Serial.println("w");
+				omuni.setupMotor(3, HIGH, LOW);
+				omuni.driveMotor(0, speed);
+				this->key_command_old = key_command;
 			default:
 				break;
 		}
