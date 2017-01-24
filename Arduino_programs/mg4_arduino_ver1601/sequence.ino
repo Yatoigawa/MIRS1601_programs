@@ -4,14 +4,15 @@ void sequence_main(void) {
 start:     // スタート初期
   vel_ctrl_reset();
 
-  while ( ! ( ( ret = cpu_read(&c) ) == 0 ) );
+  while ( ! ( ( ret = cpu_com_read(&c) ) == 0 ) );
 
   switch (c) {
     case 'l':
       omuni_ctrl_set(OMN_SDE, 100, 40);
       while (1) {
         omuni_ctrl_execute();
-        if (cpu_com_read() == 's') {
+        ret = cpu_com_read(&c);
+        if (c == 's') {
           goto start;
         }
         if (omuni_end_flag == 1) {
@@ -22,7 +23,8 @@ start:     // スタート初期
       omuni_ctrl_set(OMN_WDS, 100, 50);
       while (1) {
         omuni_ctrl_execute();
-        if (cpu_com_read() == 's') {
+        ret = cpu_com_read(&c);
+        if (c == 's') {
           goto start;
         }
         if (omuni_end_flag == 1) {
@@ -38,7 +40,8 @@ start:     // スタート初期
       omuni_ctrl_set(OMN_SDW, 100, 40);
       while (1) {
         omuni_ctrl_execute();
-        if (cpu_com_read() == 's') {
+        ret = cpu_com_read(&c);
+        if (c == 's') {
           goto start;
         }
         if (omuni_end_flag == 1) {
@@ -49,7 +52,8 @@ start:     // スタート初期
       omuni_ctrl_set(OMN_EDS, 100, 50);
       while (1) {
         omuni_ctrl_execute();
-        if (cpu_com_read() == 's') {
+        ret = cpu_com_read(&c);
+        if (c == 's') {
           goto start;
         }
         if (omuni_end_flag == 1) {
