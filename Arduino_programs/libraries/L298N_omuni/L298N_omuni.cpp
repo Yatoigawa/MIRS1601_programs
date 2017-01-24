@@ -11,8 +11,9 @@ setupMotor、driveMotor関数を直接使用することで、モーターを好
 #include "Arduino.h"
 #include "L298N_omuni.h"
 
-L298N_omuni::L298N_omuni(int A_ena, int A_in1, int A_in2, int A_in3, int A_in4, int A_enb,
-						 int B_ena, int B_in1, int B_in2, int B_in3, int B_in4, int B_enb)
+L298N_omuni::L298N_omuni(
+	int A_ena, int A_in1, int A_in2, int A_in3, int A_in4, int A_enb,
+	int B_ena, int B_in1, int B_in2, int B_in3, int B_in4, int B_enb)
 	: _motors{	{ A_in1, A_in2, A_ena },
 				{ A_in3, A_in4, A_enb },
 				{ B_in1, B_in2, B_ena },
@@ -31,6 +32,28 @@ L298N_omuni::L298N_omuni(int A_ena, int A_in1, int A_in2, int A_in3, int A_in4, 
 	pinMode(B_in3, OUTPUT);
 	pinMode(B_in4, OUTPUT);
 	pinMode(B_enb, OUTPUT);
+}
+
+//C++にはJAVAのようにコンストラクタの中で別のコンストラクタを呼ぶことができない
+L298N_omuni::L298N_omuni(const int (&MDA)[6], const int (&MDB)[6])
+	: _motors{ { MDA[1], MDA[2], MDA[0] },
+			   { MDA[3], MDA[4], MDA[5] },
+			   { MDB[1], MDB[2], MDB[0] },
+			   { MDB[3], MDB[4], MDB[5] } }
+{
+	pinMode(MDA[0], OUTPUT);
+	pinMode(MDA[1], OUTPUT);
+	pinMode(MDA[2], OUTPUT);
+	pinMode(MDA[3], OUTPUT);
+	pinMode(MDA[4], OUTPUT);
+	pinMode(MDA[5], OUTPUT);
+
+	pinMode(MDA[0], OUTPUT);
+	pinMode(MDA[1], OUTPUT);
+	pinMode(MDA[2], OUTPUT);
+	pinMode(MDA[3], OUTPUT);
+	pinMode(MDA[4], OUTPUT);
+	pinMode(MDA[5], OUTPUT);
 }
 
 /*
@@ -90,20 +113,6 @@ void L298N_omuni::rightBackward(int speed, int delay_time)
 void L298N_omuni::leftBackward(int speed, int delay_time)
 {
 	this->setupMotors(BleftBackward);
-	this->driveMotors(speed);
-	delay(delay_time);
-}
-
-void L298N_omuni::turnRight(int speed, int delay_time)
-{
-	this->setupMotors(B10010110);
-	this->driveMotors(speed);
-	delay(delay_time);
-}
-
-void L298N_omuni::turnLeft(int speed, int delay_time)
-{
-	this->setupMotors(B01101001);
 	this->driveMotors(speed);
 	delay(delay_time);
 }

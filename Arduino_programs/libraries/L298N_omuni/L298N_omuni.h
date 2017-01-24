@@ -16,8 +16,11 @@ setupMotor、driveMotor関数を直接使用することで、モーターを好
 
 class L298N_omuni {
 public:
-	L298N_omuni(int A_ena, int A_in1, int A_in2, int A_in3, int A_in4, int A_enb,
-				int B_ena, int B_in1, int B_in2, int B_in3, int B_in4, int B_enb);
+	L298N_omuni(
+		int A_ena, int A_in1, int A_in2, int A_in3, int A_in4, int A_enb,
+		int B_ena, int B_in1, int B_in2, int B_in3, int B_in4, int B_enb);
+
+	L298N_omuni(const int (&motor_driver_A)[6], const int (&motor_driver_B)[6]);
 
 	void forward(int speed, int delay_time);
 	void backward(int speed, int delay_time);
@@ -29,9 +32,6 @@ public:
 	void leftForward(int speed, int delay_time);
 	void rightBackward(int speed, int delay_time);
 	void leftBackward(int speed, int delay_time);
-
-	void turnRight(int speed, int delay_time);
-	void turnLeft(int speed, int delay_time);
 
 	void fullStop(int delay_time);
 
