@@ -40,16 +40,16 @@ public:
 	//*******
 	//PWM個別
 	//*******
-	void forward(int(&speed)[4], int delay_time);
-	void backward(int(&speed)[4], int delay_time);
+	void forward(int (&speed)[4], int delay_time);
+	void backward(int (&speed)[4], int delay_time);
 	
-	void right(int(&speed)[4], int delay_time);
-	void left(int(&speed)[4], int delay_time);
+	void right(int (&speed)[4], int delay_time);
+	void left(int (&speed)[4], int delay_time);
 
-	void rightForward(int(&speed)[4], int delay_time);
-	void leftForward(int(&speed)[4], int delay_time);
-	void rightBackward(int(&speed)[4], int delay_time);
-	void leftBackward(int(&speed)[4], int delay_time);
+	void rightForward(int (&speed)[4], int delay_time);
+	void leftForward(int (&speed)[4], int delay_time);
+	void rightBackward(int (&speed)[4], int delay_time);
+	void leftBackward(int (&speed)[4], int delay_time);
 
 
 	void setupMotors(byte state);

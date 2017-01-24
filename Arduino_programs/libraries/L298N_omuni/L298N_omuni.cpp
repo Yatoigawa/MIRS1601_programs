@@ -122,49 +122,49 @@ void L298N_omuni::fullStop(int delay_time) {
 //*******
 //PWM個別
 //*******
-void L298N_omuni::forward(int(&speed)[4], int delay_time) {
+void L298N_omuni::forward(int (&speed)[4], int delay_time) {
 	this->setupMotors(Bforward);
 	this->driveMotors(speed);
 	delay(delay_time);
 }
 
-void L298N_omuni::backward(int(&speed)[4], int delay_time) {
+void L298N_omuni::backward(int (&speed)[4], int delay_time) {
 	this->setupMotors(Bbackward);
 	this->driveMotors(speed);
 	delay(delay_time);
 }
 
-void L298N_omuni::right(int(&speed)[4], int delay_time) {
+void L298N_omuni::right(int (&speed)[4], int delay_time) {
 	this->setupMotors(Bright);
 	this->driveMotors(speed);
 	delay(delay_time);
 }
 
-void L298N_omuni::left(int(&speed)[4], int delay_time) {
+void L298N_omuni::left(int (&speed)[4], int delay_time) {
 	this->setupMotors(Bleft);
 	this->driveMotors(speed);
 	delay(delay_time);
 }
 
-void L298N_omuni::rightForward(int(&speed)[4], int delay_time) {
+void L298N_omuni::rightForward(int (&speed)[4], int delay_time) {
 	this->setupMotors(BrightForward);
 	this->driveMotors(speed);
 	delay(delay_time);
 }
 
-void L298N_omuni::leftForward(int(&speed)[4], int delay_time) {
+void L298N_omuni::leftForward(int (&speed)[4], int delay_time) {
 	this->setupMotors(BleftForward);
 	this->driveMotors(speed);
 	delay(delay_time);
 }
 
-void L298N_omuni::rightBackward(int(&speed)[4], int delay_time) {
+void L298N_omuni::rightBackward(int (&speed)[4], int delay_time) {
 	this->setupMotors(BrightBackward);
 	this->driveMotors(speed);
 	delay(delay_time);
 }
 
-void L298N_omuni::leftBackward(int(&speed)[4], int delay_time) {
+void L298N_omuni::leftBackward(int (&speed)[4], int delay_time) {
 	this->setupMotors(BleftBackward);
 	this->driveMotors(speed);
 	delay(delay_time);
