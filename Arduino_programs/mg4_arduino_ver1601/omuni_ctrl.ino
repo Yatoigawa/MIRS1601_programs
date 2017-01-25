@@ -1,4 +1,4 @@
-static omuni_state_t omuni_state = OMN_STOP;
+
 static double omuni_speed_ref = 0.0;
 static double omuni_speed_curr = 0.0;
 static int omuni_end_flag = 0;
