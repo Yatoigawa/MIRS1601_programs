@@ -5,10 +5,14 @@
 /* 変数型の定義 */
 typedef enum {
   STOP = 0,
-  STR_FB,
-  STR_LR,
-  STR_FR_BL,
-  STR_FL_BR,
+  STR_N,
+  STR_E,
+  STR_S,
+  STR_W,
+  STR_NE,
+  STR_SW,
+  STR_NW,
+  STR_SE,
   ROT
 } run_state_t;
 
@@ -27,6 +31,10 @@ typedef enum {
   OMN_WDS,
   OMN_WDN
 } omuni_state_t;
+
+
+static run_state_t run_state = STOP;
+static omuni_state_t omuni_state = OMN_STOP;
 
 typedef struct {
   unsigned char val[7];
@@ -60,8 +68,8 @@ typedef union {
 #define ENC_W2 51
 //MOTOR
 #define MTR_1ENA 4 //PWM N
-#define MTR_1ENB 5 //    E
-#define MTR_2ENA 6 //    S
+#define MTR_1ENB 5 //    S
+#define MTR_2ENA 6 //    E
 #define MTR_2ENB 7 //    W
 #define MTR_N1 33  //Digital
 #define MTR_N2 34
