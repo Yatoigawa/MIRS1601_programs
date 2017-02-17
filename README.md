@@ -4,8 +4,7 @@ MIRS用のプログラム置き場
 masterブランチとdevelopブランチ、hotfixブランチで管理する予定
 
 ## 現在のプログラム
-1. /Arduino_programs/ping_test/ping_test.ino
-2. /Arduino_programs/_7seg_from_ping
+developブランチに全プログラムがあります。気力があったらMasterにmergeするかもしれませんが、今はdevelopで我慢してください。
 
 ## .mdファイルを編集するときには
 もしこのファイルを編集する際にはPull requestから提案してください  
